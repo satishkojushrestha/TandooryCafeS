@@ -1,0 +1,8 @@
+#text-nav a:hover{
+    text-decoration: none;
+    background-color: black;
+}
+
+.button-nav{
+    padding-bottom: 10px;
+}
