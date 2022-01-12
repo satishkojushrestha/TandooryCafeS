@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Supplier{% endblock %}
+
+{% block cssandscripts %}
+    <!-- Custom styles for this page -->
+    <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <style>
+        :root{
+            --delete_btn:#d74242;
+            --edit_btn:#2fa751;
+        }
+    </style>
+
+{% endblock %}
+
+{% block current_page %} Supplier {% endblock %}
+
+{% block page_content %}
+                <!-- Begin Page Content -->
+                <div class="container-fluid" style="margin-top: 35px; margin-left: 80px; width: 90%;">
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-header py-3">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.2rem;">Suppliers</h6>
+                                </div>
+                                <div class="col-sm-12 col-md-6 add-employee">
+                                    <h6 class="m-0 font-weight-bold text-primary" style="float: right; margin-right: 10px;">
+                                        <a href="#"><i class="material-icons" style="font-size: 2rem;">add_circle_outline</i></a>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th>Contact Number</th>
+                                            <th class="sorting_asc_disabled sorting_desc_disabled text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Address</th>
+                                            <th>Contact Number</th>
+                                            <th class="text-right">Actions</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr>
+                                            <td>Tiger Nixon</td>
+                                            <td>Kathmandu</td>
+                                            <td>123456789</td>
+                                            <td class="text-right" style="padding: 10px;">
+                                                <a href="#"  target="_blank"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
+                                                <a href="#"  target="_blank"><i class="material-icons" style="color: var(--delete_btn);">delete</i></a>
+                                            </td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td>Garrett Winters</td>
+                                            <td>Bhaktapur</td>
+                                            <td>112170750</td>
+                                            <td class="text-right" style="padding: 10px;">
+                                                <a href="#"  target="_blank"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
+                                                <a href="#"  target="_blank"><i class="material-icons" style="color: var(--delete_btn);">delete</i></a>
+                                            </td>  
+                                        </tr>
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->        
+
+    {% endblock %}
+
+   
+    {% block script %}
+    <!-- Page level plugins -->
+    <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+    {% endblock %}
+
+</body>
+
+</html>

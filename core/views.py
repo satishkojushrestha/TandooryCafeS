@@ -79,3 +79,6 @@ def update_profile(request):
 
 def employee_view(request):
     return render(request, "pages/employee_detail.html")
+
+def supplier_view(request):
+    return render(request, "pages/supplier_detail.html")
