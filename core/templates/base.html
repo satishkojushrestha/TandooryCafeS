@@ -131,7 +131,7 @@
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
-                        <a class="collapse-item text-white" href="buttons.html">Add Employee</a>
+                        <a class="collapse-item text-white" href="{% url 'employee' %}">Add Employee</a>
                     </div>
                 </div>
             </li>
@@ -423,6 +423,8 @@
     <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
     <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
 
+    {% block script %}
+    {% endblock %}
 </body>
 
 </html>

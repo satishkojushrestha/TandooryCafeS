@@ -76,3 +76,6 @@ def update_profile(request):
         return redirect("profile")
 
     return render(request, "update_profile.html")
+
+def employee_view(request):
+    return render(request, "pages/employee_detail.html")
