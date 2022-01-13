@@ -5,7 +5,7 @@ from core.models import User
 from django.contrib.auth.decorators import login_required, permission_required
 
 
-@permission_required('can_add_user', login_url="/login/")
+@login_required(login_url="/")
 def base_view(request):
     return render(request, "base.html")
 
@@ -40,11 +40,12 @@ def loginView(request):
                     })
     return render(request, "authentication/login.html", {"forms":LoginForm})
 
-@permission_required('can_add_user', login_url="/login/")
+@login_required(login_url="/")
 def profile_view(request):
     return render(request,"profile.html")
 
-@permission_required('can_add_user', login_url="/login/")
+# @permission_required('can_add_user', login_url="/")
+@login_required(login_url="/")
 def update_profile(request):
     if request.method == "POST":
         print(request.POST)
