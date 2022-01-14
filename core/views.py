@@ -1,8 +1,12 @@
+from turtle import position
 from django.shortcuts import render, redirect
-from core.forms import Employee, LoginForm
+from core.forms import EmployeeForm, LoginForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import User
-from django.contrib.auth.decorators import login_required, permission_required
+from core.models import User, Employee
+from django.contrib.auth.decorators import login_required
+from django.views.generic import View
+from django.http import JsonResponse
+from datetime import datetime
 
 
 @login_required(login_url="/")
@@ -79,10 +83,38 @@ def update_profile(request):
     return render(request, "update_profile.html")
 
 def employee_view(request):
-    employeeForm = Employee()    
+    employeeForm = EmployeeForm()    
     return render(request, "pages/employee_detail.html", {
-        'form': employeeForm
+        'form': employeeForm,
+        'employees': Employee.objects.all(),
     })
 
 def supplier_view(request):
     return render(request, "pages/supplier_detail.html")
+
+
+class CreateCrudUser(View):
+
+
+    def get(self, request):
+        name = request.GET.get('name', None)
+        position = request.GET.get('position', None)
+        age = request.GET.get('age', None)
+        salary = request.GET.get('salary', None)
+
+        new_employee = Employee(
+            name = name,
+            position = position,
+            age = age,
+            salary = salary
+        )
+
+        new_employee.save()
+
+        user_data = {'id':new_employee.id,'name':new_employee.name,'position':new_employee.position,'age':new_employee.age,'start_date':new_employee.start_date.strftime("%b. %d, %Y"),'salary':new_employee.salary}
+
+        data_user = {
+            'user': user_data
+        }
+
+        return JsonResponse(data_user)

@@ -1,4 +1,5 @@
 from pyexpat import model
+from re import T
 from statistics import mode
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -12,4 +13,5 @@ class Employee(models.Model):
     name = models.CharField(max_length=30)
     position = models.CharField(max_length=30)
     age = models.CharField(max_length=3)
+    start_date = models.DateField(auto_now_add=True)
     salary = models.IntegerField()
