@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Employee{% endblock %}
 
@@ -317,22 +318,22 @@
                                 <div class="input-fields">
                                     <div class="form-group">
                                         <label for="name">Name</label><br>
-                                        <input type="text" name="name" placeholder="Name">
+                                        {% render_field form.name placeholder="Full Name" %}
                                     </div>
                         
                                     <div class="form-group">
                                         <label for="position">Position</label><br>
-                                        <input type="text" name="position" placeholder="Position">
+                                        {% render_field form.position placeholder="Position" %}
                                     </div> 
                                     
                                     <div class="form-group">
                                         <label for="age">Age</label><br>
-                                        <input type="text" name="age" placeholder="Age">
+                                        {% render_field form.age placeholder="Age" %}                                        
                                     </div> 
     
                                     <div class="form-group">
                                         <label for="salary">Salary</label><br>
-                                        <input type="number" name="salary" placeholder="Salary">
+                                        {% render_field form.salary placeholder="Salary" %}                                        
                                     </div>                     
                                 </div>
                                 

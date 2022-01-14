@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from core.forms import LoginForm
+from core.forms import Employee, LoginForm
 from django.contrib.auth import login, logout, authenticate
 from core.models import User
 from django.contrib.auth.decorators import login_required, permission_required
@@ -79,7 +79,10 @@ def update_profile(request):
     return render(request, "update_profile.html")
 
 def employee_view(request):
-    return render(request, "pages/employee_detail.html")
+    employeeForm = Employee()    
+    return render(request, "pages/employee_detail.html", {
+        'form': employeeForm
+    })
 
 def supplier_view(request):
     return render(request, "pages/supplier_detail.html")
