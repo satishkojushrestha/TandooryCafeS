@@ -185,7 +185,7 @@
                                                 <td class="salary userData" name="salary">{{ user.salary }}</td>
                                                 <td class="text-right" style="padding: 10px;">
                                                     <button onclick="editUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
-                                                    <button class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
+                                                    <button onclick="deleteUser({{user.id}})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
                                                 </td>  
                                             </tr>
                                         {% endfor %}
@@ -423,6 +423,25 @@
             }
             editForm.classList.toggle('hidden');
         }
+
+        function deleteUser(id) {
+            var action = confirm("Are you sure you want to delete this employee?");
+            if (action != false) {
+                $.ajax({
+                    url: '{% url "crud_ajax_delete" %}',
+                    data: {
+                        'id': id,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.deleted) {
+                        $("#userTable #user-" + id).remove();
+                        }
+                    }
+                });
+            }
+        }
+
     </script>
     {% endblock %}
 
