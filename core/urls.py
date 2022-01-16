@@ -13,5 +13,7 @@ urlpatterns = [
     path('ajax/crud/update/', UpdateCrudUserEmployee.as_view(), name='crud_ajax_update'),
     path('ajax/crud/delete/', DeleteCrudUserEmployee.as_view(), name='crud_ajax_delete'),
     path('ajax/crud/create/supplier', CreateCrudUserSupplier.as_view(), name='crud_ajax_create_supplier'),
+    path('ajax/crud/update/supplier', UpdateCrudUserSupplier.as_view(), name='crud_ajax_update_supplier'),
+    path('ajax/crud/delete/supplier', DeleteCrudUserSupplier.as_view(), name='crud_ajax_delete_supplier'),
 
 ]

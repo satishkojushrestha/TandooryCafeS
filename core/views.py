@@ -180,3 +180,36 @@ class CreateCrudUserSupplier(View):
         }
 
         return JsonResponse(data_user)
+
+
+
+class UpdateCrudUserSupplier(View):
+
+    def get(self, request):
+        id = request.GET.get('id', None)
+        name = request.GET.get('name', None)
+        address = request.GET.get('address', None)
+        contact_number = request.GET.get('contact_number', None)
+
+        user = Supplier.objects.get(id=id)
+        user.name = name
+        user.address = address
+        user.contact_number = contact_number
+        user.save()
+
+        user_data = {'id':id, 'name':user.name,'address':user.address,'contact_number':user.contact_number}
+
+        data_user = {
+            'user': user_data
+        }
+
+        return JsonResponse(data_user)
+
+class DeleteCrudUserSupplier(View):
+    def  get(self, request):
+        id1 = request.GET.get('id', None)
+        Supplier.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)

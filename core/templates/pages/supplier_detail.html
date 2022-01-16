@@ -176,8 +176,8 @@
                                                 <td class="address userData" name="address">{{ user.address }}</td>
                                                 <td class="contact_number userData" name="contact_number">{{ user.contact_number }}</td>
                                                 <td class="text-right" style="padding: 10px;">
-                                                    <button class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
-                                                    <button class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
+                                                    <button onclick="editUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
+                                                    <button onclick="deleteUser({{user.id}})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
                                                 </td>  
                                             </tr>
                                         {% endfor %}
@@ -220,6 +220,40 @@
     
                     </div>
                 </div>
+
+
+                
+                <div class="from opaque hidden" id="editForm">
+                    <div class="flex-item">
+    
+                            <form id="updateUser" class="box">
+                                <span class="form-header">Edit Supplier</span>    
+                                <input class="form-control" id="form-id" type="hidden" name="formId"/>
+                                <div class="input-fields">
+                                    <div class="form-group">
+                                        <label for="name">Name</label><br>
+                                        {% render_field form.name placeholder="Full Name" id="form-name" %}
+                                    </div>
+                        
+                                    <div class="form-group">
+                                        <label for="address">Address</label><br>
+                                        {% render_field form.address placeholder="Address" id="form-address" %}
+                                    </div> 
+                                    
+                                    <div class="form-group">
+                                        <label for="contact_number">Contact Number</label><br>
+                                        {% render_field form.contact_number placeholder="Number" id="form-contact-number" %}                                        
+                                    </div>                     
+                                </div>
+                                
+                                <div class="button-area">
+                                    <button class="center btn-right close-button" id="editcanclebtn">Close</button>
+                                    <button type="submit" class="btn center btn-right done-button">Add</button>
+                                </div>                                
+                            </form>
+    
+                    </div>
+                </div>
                 
                 <!-- /.container-fluid -->        
 
@@ -237,7 +271,8 @@
 
         const addBtnClicked = document.querySelector('.addButton');
         const addcanclebtn = document.querySelector('#addcanclebtn');
-
+        const editcanclebtn = document.querySelector('#editcanclebtn');
+        const editForm = document.querySelector('#editForm');
         
 
         addBtnClicked.addEventListener('click', (event)=> {
@@ -248,6 +283,11 @@
         addcanclebtn.addEventListener('click', (event)=> {
             event.preventDefault();
             addFrom.classList.toggle('hidden')
+        })
+
+        editcanclebtn.addEventListener('click', (event)=> {
+            event.preventDefault();
+            editForm.classList.toggle('hidden')
         })
 
         $("form#addUser").submit(function() {            
@@ -286,11 +326,88 @@
                     <td class="address userData" name="address">${ user.address }</td>
                     <td class="contact_number userData" name="contact_number">${ user.contact_number }</td>
                     <td class="text-right" style="padding: 10px;">
-                        <button class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
-                        <button class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
+                        <button onclick="editUser(${ user.id })" class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
+                        <button onclick="deleteUser(${ user.id })" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
                     </td>  
                 </tr>
             `);
+        }
+
+        function updateToUserTabel(user){
+            $("#userTable #user-" + user.id).children(".userData").each(function() {
+                var attr = $(this).attr("name");
+                if (attr == "name") {
+                $(this).text(user.name);
+                } else if (attr == "address") {
+                $(this).text(user.address);
+                } else if (attr == "contact_number") {
+                $(this).text(user.contact_number);
+                }
+            });
+        }
+
+        $("form#updateUser").submit(function() {
+            var idInput2 = $('input[name="formId"]').val();
+            var nameInput2 = $('#form-name').val();
+            var addressInput2 = $('#form-address').val();
+            var contactInput2 = $('#form-contact-number').val();
+
+            if (nameInput2 && addressInput2 && contactInput2) {
+                // Create Ajax Call
+                $.ajax({
+                    url: '{% url "crud_ajax_update_supplier" %}',
+                    data: {
+                        'id':idInput2,
+                        'name': nameInput2,
+                        'address': addressInput2,
+                        'contact_number': contactInput2,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.user) {
+                            updateToUserTabel(data.user);
+                        }
+                    }
+                });
+            } else {
+                alert("All fields must have a valid value.");
+            }
+            $('form#updateUser').trigger("reset");
+            editForm.classList.toggle('hidden');
+            return false;
+        });
+
+        // Update Django Ajax Call
+        function editUser(id) {
+            if(id) {
+                tr_id = "#user-" + id;
+                name = $(tr_id).find(".name").text();
+                address = $(tr_id).find(".address").text();
+                contact_number = $(tr_id).find(".contact_number").text();
+                $('#form-id').val(id);
+                $('#form-name').val(name);
+                $('#form-address').val(address);
+                $('#form-contact-number').val(contact_number);
+            }
+            editForm.classList.toggle('hidden');
+        }
+
+        function deleteUser(id) {
+            var action = confirm("Are you sure you want to delete this employee?");
+            if (action != false) {
+                $.ajax({
+                    url: '{% url "crud_ajax_delete_supplier" %}',
+                    data: {
+                        'id': id,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.deleted) {
+                        $("#userTable #user-" + id).remove();
+                        }
+                    }
+                });
+            }
         }
 
     </script>

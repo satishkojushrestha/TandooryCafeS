@@ -242,7 +242,7 @@
                     <div class="flex-item">
     
                             <form id="updateUser" class="box">
-                                <span class="form-header">Add Employee</span>    
+                                <span class="form-header">Edit Employee</span>    
                                 <input class="form-control" id="form-id" type="hidden" name="formId"/>
                                 <div class="input-fields">
                                     <div class="form-group">
@@ -345,7 +345,7 @@
 
         function appendToUsrTable(user) {
             $("#userTable > tbody:last-child").append(`
-                <tr id="user-{{ user.id }}">
+                <tr id="user-${ user.id }">
                     <td class="name userData" name="name">${ user.name }</td>
                     <td class="position userData" name="position">${ user.position }</td>
                     <td class="age userData" name="age">${ user.age }</td>
@@ -368,7 +368,7 @@
                 $(this).text(user.position);
                 } else if (attr == "age") {
                 $(this).text(user.age);
-                } else{
+                } else if (att == "salary"){
                 $(this).text(user.salary);
                 } 
             });
