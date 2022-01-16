@@ -1,8 +1,8 @@
 from turtle import position
 from django.shortcuts import render, redirect
-from core.forms import EmployeeForm, LoginForm
+from core.forms import EmployeeForm, LoginForm, SupplierForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import User, Employee
+from core.models import Supplier, User, Employee
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import JsonResponse
@@ -90,7 +90,11 @@ def employee_view(request):
     })
 
 def supplier_view(request):
-    return render(request, "pages/supplier_detail.html")
+    supplierForm = SupplierForm()    
+    return render(request, "pages/supplier_detail.html", {
+        'form': supplierForm,
+        'suppliers': Supplier.objects.all(),
+    })
 
 
 class CreateCrudUser(View):

@@ -15,3 +15,8 @@ class Employee(models.Model):
     age = models.CharField(max_length=3)
     start_date = models.DateField(auto_now_add=True)
     salary = models.IntegerField()
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=30)
+    address = models.CharField(max_length=30)
+    contact_number = models.CharField(max_length=11)

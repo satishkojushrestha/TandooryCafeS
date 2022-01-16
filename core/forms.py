@@ -19,3 +19,8 @@ class EmployeeForm(forms.Form):
     position = forms.CharField(max_length=30, required=True)
     age = forms.CharField(max_length=3, required=True)
     salary = forms.IntegerField()
+
+class SupplierForm(forms.Form):
+    name = forms.CharField(max_length=30, required=True)
+    address = forms.CharField(max_length=30, required=True)
+    contact_number = forms.CharField(max_length=10, required=True)
