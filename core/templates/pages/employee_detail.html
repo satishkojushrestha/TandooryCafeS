@@ -345,15 +345,15 @@
 
         function appendToUsrTable(user) {
             $("#userTable > tbody:last-child").append(`
-                <tr id="user-${ user.id }">
-                    <td class="name userData" name="fname">${ user.name }</td>
-                    <td class="position userData" name="lname">${ user.position }</td>
-                    <td class="age userData" name="username">${ user.age }</td>
-                    <td class="startDate userData" name="username">${ user.start_date }</td>
-                    <td class="salary userData" name="bloodgroup">${ user.salary }</td>
+                <tr id="user-{{ user.id }}">
+                    <td class="name userData" name="name">${ user.name }</td>
+                    <td class="position userData" name="position">${ user.position }</td>
+                    <td class="age userData" name="age">${ user.age }</td>
+                    <td class="startDate userData" name="start_date">${ user.start_date }</td>
+                    <td class="salary userData" name="salary">${ user.salary }</td>
                     <td class="text-right" style="padding: 10px;">
-                        <a href="#"  target="_blank"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
-                        <a href="#"  target="_blank"><i class="material-icons" style="color: var(--delete_btn);">delete</i></a>
+                        <button onclick="editUser(${ user.id })" class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
+                        <button onclick="deleteUser(${user.id})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
                     </td>  
                 </tr>
             `);

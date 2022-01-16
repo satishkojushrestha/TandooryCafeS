@@ -97,7 +97,7 @@ def supplier_view(request):
     })
 
 
-class CreateCrudUser(View):
+class CreateCrudUserEmployee(View):
 
 
     def get(self, request):
@@ -124,7 +124,7 @@ class CreateCrudUser(View):
         return JsonResponse(data_user)
 
 
-class UpdateCrudUser(View):
+class UpdateCrudUserEmployee(View):
 
     def get(self, request):
         id = request.GET.get('id', None)
@@ -147,7 +147,7 @@ class UpdateCrudUser(View):
 
         return JsonResponse(data_user)
 
-class DeleteCrudUser(View):
+class DeleteCrudUserEmployee(View):
     def  get(self, request):
         id1 = request.GET.get('id', None)
         Employee.objects.get(id=id1).delete()
@@ -155,3 +155,28 @@ class DeleteCrudUser(View):
             'deleted': True
         }
         return JsonResponse(data)
+
+
+class CreateCrudUserSupplier(View):
+
+
+    def get(self, request):
+        name = request.GET.get('name', None)
+        address = request.GET.get('address', None)
+        contact_number = request.GET.get('contact_number', None)
+
+        new_supplier = Supplier(
+            name = name,
+            address = address,
+            contact_number = contact_number,
+        )
+
+        new_supplier.save()
+
+        user_data = {'id':new_supplier.id,'name':new_supplier.name,'address':new_supplier.address,'contact_number':new_supplier.contact_number}
+
+        data_user = {
+            'user': user_data
+        }
+
+        return JsonResponse(data_user)
