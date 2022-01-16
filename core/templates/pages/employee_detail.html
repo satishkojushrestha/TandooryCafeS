@@ -75,12 +75,6 @@
             z-index: 5;
         }
 
-        .cancelbtn{
-            position: absolute;
-            top: 0px;
-            right: 0;
-        }
-
         input{
             margin-left: 10px;
             border-radius: 10px;
@@ -127,6 +121,10 @@
             color: #efefef;
         }
 
+        .rm-background{
+            background-color: transparent; 
+            border:none;
+        }
         
     </style>
 
@@ -180,14 +178,14 @@
 
                                         {% for user in employees %}
                                             <tr id="user-{{ user.id }}">
-                                                <td class="name userData" name="fname">{{ user.name }}</td>
-                                                <td class="position userData" name="lname">{{ user.position }}</td>
-                                                <td class="age userData" name="username">{{ user.age }}</td>
-                                                <td class="startDate userData" name="username">{{ user.start_date }}</td>
-                                                <td class="salary userData" name="bloodgroup">{{ user.salary }}</td>
+                                                <td class="name userData" name="name">{{ user.name }}</td>
+                                                <td class="position userData" name="position">{{ user.position }}</td>
+                                                <td class="age userData" name="age">{{ user.age }}</td>
+                                                <td class="startDate userData" name="start_date">{{ user.start_date }}</td>
+                                                <td class="salary userData" name="salary">{{ user.salary }}</td>
                                                 <td class="text-right" style="padding: 10px;">
-                                                    <a href="#"  target="_blank"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
-                                                    <a href="#"  target="_blank"><i class="material-icons" style="color: var(--delete_btn);">delete</i></a>
+                                                    <button onclick="editUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
+                                                    <button class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
                                                 </td>  
                                             </tr>
                                         {% endfor %}
@@ -231,10 +229,47 @@
                                 </div>
                                 
                                 <div class="button-area">
-                                    <button class="center btn-right close-button" id="closebtn">Close</button>
+                                    <button class="center btn-right close-button" id="addcanclebtn">Close</button>
                                     <button type="submit" class="btn center btn-right done-button">Add</button>
                                 </div>                                
-                                <button type="button" class="btn cancelbtn" id="canclebtn">X</button>
+                            </form>
+    
+                    </div>
+                </div>
+
+
+                <div class="from opaque hidden" id="editForm">
+                    <div class="flex-item">
+    
+                            <form id="updateUser" class="box">
+                                <span class="form-header">Add Employee</span>    
+                                <input class="form-control" id="form-id" type="hidden" name="formId"/>
+                                <div class="input-fields">
+                                    <div class="form-group">
+                                        <label for="name">Name</label><br>
+                                        {% render_field form.name placeholder="Full Name" id="form-name" %}
+                                    </div>
+                        
+                                    <div class="form-group">
+                                        <label for="position">Position</label><br>
+                                        {% render_field form.position placeholder="Position" id="form-position" %}
+                                    </div> 
+                                    
+                                    <div class="form-group">
+                                        <label for="age">Age</label><br>
+                                        {% render_field form.age placeholder="Age" id="form-age" %}                                        
+                                    </div> 
+    
+                                    <div class="form-group">
+                                        <label for="salary">Salary</label><br>
+                                        {% render_field form.salary placeholder="Salary" id="form-salary" %}                                        
+                                    </div>                     
+                                </div>
+                                
+                                <div class="button-area">
+                                    <button class="center btn-right close-button" id="editcanclebtn">Close</button>
+                                    <button type="submit" class="btn center btn-right done-button">Add</button>
+                                </div>                                
                             </form>
     
                     </div>
@@ -257,22 +292,23 @@
     <script>
 
         const addBtnClicked = document.querySelector('.addButton');
-        const canclebtn = document.querySelector('#canclebtn');
-        const closebtn = document.querySelector('#closebtn');
+        const addcanclebtn = document.querySelector('#addcanclebtn');
+        const editcanclebtn = document.querySelector('#editcanclebtn');
+        const editForm = document.querySelector('#editForm');
 
         addBtnClicked.addEventListener('click', (event)=> {
             event.preventDefault();
             addFrom.classList.toggle('hidden')
         })
 
-        canclebtn.addEventListener('click', (event)=> {
+        addcanclebtn.addEventListener('click', (event)=> {
             event.preventDefault();
             addFrom.classList.toggle('hidden')
         })
 
-        closebtn.addEventListener('click', (event)=> {
+        editcanclebtn.addEventListener('click', (event)=> {
             event.preventDefault();
-            addFrom.classList.toggle('hidden')
+            editForm.classList.toggle('hidden')
         })
 
 
@@ -323,6 +359,70 @@
             `);
         }
 
+        function updateToUserTabel(user){
+            $("#userTable #user-" + user.id).children(".userData").each(function() {
+                var attr = $(this).attr("name");
+                if (attr == "name") {
+                $(this).text(user.name);
+                } else if (attr == "position") {
+                $(this).text(user.position);
+                } else if (attr == "age") {
+                $(this).text(user.age);
+                } else{
+                $(this).text(user.salary);
+                } 
+            });
+        }
+
+        $("form#updateUser").submit(function() {
+            var idInput2 = $('input[name="formId"]').val();
+            var nameInput2 = $('#form-name').val();
+            var positionInput2 = $('#form-position').val();
+            var ageInput2 = $('#form-age').val();
+            var salaryInput2 = $('#form-salary').val();
+
+            if (nameInput2 && positionInput2 && ageInput2 && salaryInput2) {
+                // Create Ajax Call
+                $.ajax({
+                    url: '{% url "crud_ajax_update" %}',
+                    data: {
+                        'id':idInput2,
+                        'name': nameInput2,
+                        'position': positionInput2,
+                        'age': ageInput2,
+                        'salary': salaryInput2,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.user) {
+                            updateToUserTabel(data.user);
+                        }
+                    }
+                });
+            } else {
+                alert("All fields must have a valid value.");
+            }
+            $('form#updateUser').trigger("reset");
+            editForm.classList.toggle('hidden');
+            return false;
+        });
+
+        // Update Django Ajax Call
+        function editUser(id) {
+            if(id) {
+                tr_id = "#user-" + id;
+                name = $(tr_id).find(".name").text();
+                position = $(tr_id).find(".position").text();
+                age = $(tr_id).find(".age").text();
+                salary = $(tr_id).find(".salary").text();
+                $('#form-id').val(id);
+                $('#form-name').val(name);
+                $('#form-position').val(position);
+                $('#form-age').val(age);
+                $('#form-salary').val(salary);
+            }
+            editForm.classList.toggle('hidden');
+        }
     </script>
     {% endblock %}
 

@@ -118,3 +118,27 @@ class CreateCrudUser(View):
         }
 
         return JsonResponse(data_user)
+
+
+class UpdateCrudUser(View):
+
+    def get(self, request):
+        id = request.GET.get('id', None)
+        name = request.GET.get('name', None)
+        position = request.GET.get('position', None)
+        age = request.GET.get('age', None)
+        salary = request.GET.get('salary')
+        user = Employee.objects.get(id=id)
+        user.name = name
+        user.position = position
+        user.age = age
+        user.salary = salary
+        user.save()
+
+        user_data = {'id':id, 'name':user.name,'position':user.position,'age':user.age,'salary':user.salary}
+
+        data_user = {
+            'user': user_data
+        }
+
+        return JsonResponse(data_user)
