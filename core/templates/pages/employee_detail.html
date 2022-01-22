@@ -130,7 +130,7 @@
 
 {% endblock %}
 
-{% block current_page %} Employee {% endblock %}
+{% block current_page %} Employees {% endblock %}
 
 {% block page_content %}
                 <!-- Begin Page Content -->
@@ -153,7 +153,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -344,7 +344,7 @@
         });
 
         function appendToUsrTable(user) {
-            $("#userTable > tbody:last-child").append(`
+            $("#dataTable > tbody:last-child").append(`
                 <tr id="user-${ user.id }">
                     <td class="name userData" name="name">${ user.name }</td>
                     <td class="position userData" name="position">${ user.position }</td>
@@ -360,7 +360,7 @@
         }
 
         function updateToUserTabel(user){
-            $("#userTable #user-" + user.id).children(".userData").each(function() {
+            $("#dataTable #user-" + user.id).children(".userData").each(function() {
                 var attr = $(this).attr("name");
                 if (attr == "name") {
                 $(this).text(user.name);
@@ -435,7 +435,7 @@
                     dataType: 'json',
                     success: function (data) {
                         if (data.deleted) {
-                        $("#userTable #user-" + id).remove();
+                        $("#dataTable #user-" + id).remove();
                         }
                     }
                 });

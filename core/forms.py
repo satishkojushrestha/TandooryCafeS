@@ -15,10 +15,31 @@ class LoginForm(forms.Form):
         fields = ('email', 'password')
 
 class EmployeeForm(forms.Form):
-    name = forms.CharField(max_length=30, required=True)
-    position = forms.CharField(max_length=30, required=True)
-    age = forms.CharField(max_length=3, required=True)
-    salary = forms.IntegerField()
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'First Name'
+        }), max_length=15, required=True)
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'Last Name'
+        }), max_length=15, required=True)
+    position = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'Position'
+        }), max_length=30, required=True)
+    age = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'Age'
+        }), max_length=3, required=True)
+    salary = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'Salary'
+        }), max_value=100)
 
 class SupplierForm(forms.Form):
     name = forms.CharField(max_length=30, required=True)

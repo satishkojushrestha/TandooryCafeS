@@ -89,6 +89,13 @@ def employee_view(request):
         'employees': Employee.objects.all(),
     })
 
+def add_employee_view(request):
+    employeeForm = EmployeeForm()    
+    return render(request, "pages/add_employee.html", {
+        'form': employeeForm,
+        'employees': Employee.objects.all(),
+    })
+
 def supplier_view(request):
     supplierForm = SupplierForm()    
     return render(request, "pages/supplier_detail.html", {

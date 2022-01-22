@@ -18,8 +18,8 @@
         rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap" rel="stylesheet">
 
     <!-- styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" !important>
@@ -131,7 +131,12 @@
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
-                        <a class="collapse-item text-white" href="{% url 'employee' %}">Add Employee</a>
+                        <a class="collapse-item text-white" href="{% url 'add_employee' %}">Add Employee</a>
+                    </div>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                    <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
+                        <a class="collapse-item text-white" href="{% url 'employee' %}">Employees</a>
                     </div>
                 </div>
             </li>
