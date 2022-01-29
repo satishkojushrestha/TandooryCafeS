@@ -90,9 +90,25 @@ def employee_view(request):
     })
 
 def add_employee_view(request):
-    employeeForm = EmployeeForm()    
+    employeeForm = EmployeeForm(request.POST)
+    if employeeForm.is_valid():
+        first_name = employeeForm.cleaned_data.get("first_name")
+        last_name = employeeForm.cleaned_data.get("last_name")
+        position = employeeForm.cleaned_data.get("position")
+        age = employeeForm.cleaned_data.get("age")
+        salary = employeeForm.cleaned_data.get("salary")
+        new_employee = Employee(
+            first_name = first_name,
+            last_name = last_name,
+            position = position,
+            age = age,
+            salary = salary
+        )     
+        new_employee.save()
+        return redirect("add_employee") 
+     
     return render(request, "pages/add_employee.html", {
-        'form': employeeForm,
+        'form': EmployeeForm(),
         'employees': Employee.objects.all(),
     })
 

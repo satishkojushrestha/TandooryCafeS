@@ -10,7 +10,8 @@ class User(AbstractUser):
     address = models.CharField(max_length=50, null=True, blank=True)
 
 class Employee(models.Model):
-    name = models.CharField(max_length=30)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     position = models.CharField(max_length=30)
     age = models.CharField(max_length=3)
     start_date = models.DateField(auto_now_add=True)

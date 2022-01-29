@@ -39,7 +39,7 @@ class EmployeeForm(forms.Form):
         attrs={
         'class':'form-control',
         'placeholder':'Salary'
-        }), max_value=100)
+        }), max_value=500000)
 
 class SupplierForm(forms.Form):
     name = forms.CharField(max_length=30, required=True)
