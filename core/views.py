@@ -1,3 +1,4 @@
+from telnetlib import STATUS
 from turtle import position
 from django.shortcuts import render, redirect
 from core.forms import EmployeeForm, LoginForm, SupplierForm
@@ -5,7 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from core.models import Supplier, User, Employee
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from datetime import datetime
 
 
@@ -109,8 +110,40 @@ def add_employee_view(request):
      
     return render(request, "pages/add_employee.html", {
         'form': EmployeeForm(),
-        'employees': Employee.objects.all(),
     })
+
+def edit_employee_view(request, id):
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        position = request.POST.get("position")
+        age = request.POST.get("age")
+        salary = request.POST.get("salary")
+        try:
+            update_employee = Employee.objects.get(id=id)
+            if first_name:
+                update_employee.first_name = first_name
+            if last_name:
+                update_employee.last_name = last_name
+            if position:
+                update_employee.position = position
+            if age:
+                update_employee.age = age
+            if salary:
+                update_employee.salary = salary
+            update_employee.save()
+            return redirect("employee")
+        except:
+            return HttpResponse(status=404)
+    try:
+        get_employee = Employee.objects.get(id=id)   
+        return render(request, "pages/edit_employee.html", {
+            'form': EmployeeForm(),
+            'edit_user': get_employee,
+        })  
+    except:
+        return HttpResponse(status=404)
+   
 
 def supplier_view(request):
     supplierForm = SupplierForm()    
