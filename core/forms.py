@@ -42,6 +42,24 @@ class EmployeeForm(forms.Form):
         }), max_value=500000)
 
 class SupplierForm(forms.Form):
-    name = forms.CharField(max_length=30, required=True)
-    address = forms.CharField(max_length=30, required=True)
-    contact_number = forms.CharField(max_length=10, required=True)
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'First Name'
+        }), max_length=15, required=True)
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'Last Name'
+        }), max_length=15, required=True)
+    address = forms.CharField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'Address'
+        }), max_length=40, required=True)
+    contact = forms.IntegerField(widget=forms.TextInput(
+        attrs={
+        'class':'form-control',
+        'placeholder':'Contact Number'
+        }), required=True)
+

@@ -147,9 +147,15 @@
                     <i class="material-icons">store</i>
                     <span>Supplier</span>
                 </a>
-                <div id="collapseFour" class="collapse button-nav" aria-labelledby="headingFour" data-parent="#accordionSidebar">
+
+                <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
-                        <a class="collapse-item text-white" href="{% url 'supplier' %}">Add Supplier</a>
+                        <a class="collapse-item text-white" href="{% url 'add_supplier' %}">Add Supplier</a>
+                    </div>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                    <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
+                        <a class="collapse-item text-white" href="{% url 'supplier' %}">Supplier</a>
                     </div>
                 </div>
             </li>

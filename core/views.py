@@ -91,22 +91,23 @@ def employee_view(request):
     })
 
 def add_employee_view(request):
-    employeeForm = EmployeeForm(request.POST)
-    if employeeForm.is_valid():
-        first_name = employeeForm.cleaned_data.get("first_name")
-        last_name = employeeForm.cleaned_data.get("last_name")
-        position = employeeForm.cleaned_data.get("position")
-        age = employeeForm.cleaned_data.get("age")
-        salary = employeeForm.cleaned_data.get("salary")
-        new_employee = Employee(
-            first_name = first_name,
-            last_name = last_name,
-            position = position,
-            age = age,
-            salary = salary
-        )     
-        new_employee.save()
-        return redirect("add_employee") 
+    if request.method == "POST":
+        employeeForm = EmployeeForm(request.POST)
+        if employeeForm.is_valid():
+            first_name = employeeForm.cleaned_data.get("first_name")
+            last_name = employeeForm.cleaned_data.get("last_name")
+            position = employeeForm.cleaned_data.get("position")
+            age = employeeForm.cleaned_data.get("age")
+            salary = employeeForm.cleaned_data.get("salary")
+            new_employee = Employee(
+                first_name = first_name,
+                last_name = last_name,
+                position = position,
+                age = age,
+                salary = salary
+            )     
+            new_employee.save()
+            return redirect("add_employee") 
      
     return render(request, "pages/add_employee.html", {
         'form': EmployeeForm(),
@@ -150,6 +151,31 @@ def supplier_view(request):
     return render(request, "pages/supplier_detail.html", {
         'form': supplierForm,
         'suppliers': Supplier.objects.all(),
+    })
+
+
+def add_supplier_view(request):
+    if request.method == "POST":
+        form = SupplierForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data.get("first_name")
+            last_name = form.cleaned_data.get("last_name")
+            address = form.cleaned_data.get("address")
+            contact = form.cleaned_data.get("contact")
+            new_supplier = Supplier(
+                first_name = first_name,
+                last_name = last_name,
+                address = address,
+                contact_number = contact,
+            )     
+            new_supplier.save()
+            return redirect("add_supplier")
+        else:
+            return render(request,"pages/add_supplier.html",{
+                "form":form
+            })     
+    return render(request, "pages/add_supplier.html",{
+        "form":SupplierForm()
     })
 
 
