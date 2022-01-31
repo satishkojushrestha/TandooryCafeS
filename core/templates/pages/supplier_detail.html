@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load widget_tweaks %}
 
 {% block title %}Supplier{% endblock %}
 
@@ -11,114 +10,6 @@
         :root{
             --delete_btn:#d74242;
             --edit_btn:#2fa751;
-        }
-
-        .hidden{
-            display: none;
-        }
-
-        .from{
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .flex-item{
-            display: flex;   
-            flex-direction: column;  
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 65%; 
-        }
-
-        .center{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .btn{
-            text-decoration: none;
-            color: white;
-            background-color: black;
-            width: 50px;
-            height: 30px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 12px;
-            border-radius: 10%;
-        }
-
-        .box{
-            display: flex;
-            padding: 20px 60px 10px 30px;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px; 
-            background-color: white;
-            width: 650px;
-            height: 500px;
-            color: #605656;
-            font-weight: 600;
-        }
-
-        .opaque{
-            position: absolute;
-            top:0;
-            left:0;
-            bottom:0;
-            right: 0;
-            background-color: rgb(0, 0, 0, 0.55);
-            z-index: 5;
-        }
-
-        input{
-            margin-left: 10px;
-            border-radius: 10px;
-            border: 1px #605656 solid;
-            padding: 0px 0px 0px 10px;
-            height: 40px;
-            width: 80%;
-            /* font-size: 0.9rem; */
-        }
-
-        .input-fields{
-            width: 100%;
-            height: auto;
-            margin-left: 10%;
-        }
-
-        .form-header{
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .button-area{
-            width: 100%;
-            height: 50px;
-        }
-
-        .btn-right{
-            float: right;
-            height: 38px;
-            width: 60px;   
-            margin-right: 10px;         
-        }
-
-        .close-button{
-            border: none;
-            background-color: transparent;
-        }
-
-        .done-button{
-            background-color: #0BCE42;
-        }
-
-        .done-button:hover{
-            color: #efefef;
         }
 
         .rm-background{
@@ -141,18 +32,13 @@
                         <div class="card-header py-3">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
-                                    <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.2rem;">Suppliers</h6>
-                                </div>
-                                <div class="col-sm-12 col-md-6 add-employee">
-                                    <h6 class="m-0 font-weight-bold text-primary" style="float: right; margin-right: 10px;">
-                                        <a href="#" class="addButton"><i class="material-icons" style="font-size: 2rem;">add_circle_outline</i></a>                                        
-                                    </h6>
+                                    <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.2rem;">Supplier</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -172,13 +58,13 @@
                                     <tbody>
                                         {% for user in suppliers %}
                                             <tr id="user-{{ user.id }}">
-                                                <td class="name userData" name="name">{{ user.name }}</td>
-                                                <td class="address userData" name="address">{{ user.address }}</td>
-                                                <td class="contact_number userData" name="contact_number">{{ user.contact_number }}</td>
+                                                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                                <td>{{ user.address }}</td>
+                                                <td>{{ user.contact_number }}</td>
                                                 <td class="text-right" style="padding: 10px;">
-                                                    <button onclick="editUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
-                                                    <button onclick="deleteUser({{user.id}})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
-                                                </td>  
+                                                    <a href="#"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
+                                                    <button onclick="deleteUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);">delete</i></button>
+                                                </td>                                            
                                             </tr>
                                         {% endfor %}
                                        
@@ -189,72 +75,6 @@
                     </div>
 
                 </div>
-
-                <div class="from opaque hidden" id="addFrom">
-                    <div class="flex-item">
-    
-                            <form id="addUser" class="box">
-                                <span class="form-header">Add Employee</span>      
-                                <div class="input-fields">
-                                    <div class="form-group">
-                                        <label for="name">Name</label><br>
-                                        {% render_field form.name placeholder="Full Name" %}
-                                    </div>
-                        
-                                    <div class="form-group">
-                                        <label for="address">Address</label><br>
-                                        {% render_field form.address placeholder="Address" %}
-                                    </div> 
-                                    
-                                    <div class="form-group">
-                                        <label for="contact_number">Contact Number</label><br>
-                                        {% render_field form.contact_number placeholder="Number" %}                                        
-                                    </div>                     
-                                </div>
-                                
-                                <div class="button-area">
-                                    <button class="center btn-right close-button" id="addcanclebtn">Close</button>
-                                    <button type="submit" class="btn center btn-right done-button">Add</button>
-                                </div>                                
-                            </form>
-    
-                    </div>
-                </div>
-
-
-                
-                <div class="from opaque hidden" id="editForm">
-                    <div class="flex-item">
-    
-                            <form id="updateUser" class="box">
-                                <span class="form-header">Edit Supplier</span>    
-                                <input class="form-control" id="form-id" type="hidden" name="formId"/>
-                                <div class="input-fields">
-                                    <div class="form-group">
-                                        <label for="name">Name</label><br>
-                                        {% render_field form.name placeholder="Full Name" id="form-name" %}
-                                    </div>
-                        
-                                    <div class="form-group">
-                                        <label for="address">Address</label><br>
-                                        {% render_field form.address placeholder="Address" id="form-address" %}
-                                    </div> 
-                                    
-                                    <div class="form-group">
-                                        <label for="contact_number">Contact Number</label><br>
-                                        {% render_field form.contact_number placeholder="Number" id="form-contact-number" %}                                        
-                                    </div>                     
-                                </div>
-                                
-                                <div class="button-area">
-                                    <button class="center btn-right close-button" id="editcanclebtn">Close</button>
-                                    <button type="submit" class="btn center btn-right done-button">Add</button>
-                                </div>                                
-                            </form>
-    
-                    </div>
-                </div>
-                
                 <!-- /.container-fluid -->        
 
     {% endblock %}
@@ -267,130 +87,8 @@
 
     <!-- Page level custom scripts -->
     <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+
     <script>
-
-        const addBtnClicked = document.querySelector('.addButton');
-        const addcanclebtn = document.querySelector('#addcanclebtn');
-        const editcanclebtn = document.querySelector('#editcanclebtn');
-        const editForm = document.querySelector('#editForm');
-        
-
-        addBtnClicked.addEventListener('click', (event)=> {
-            event.preventDefault();
-            addFrom.classList.toggle('hidden')
-        })
-
-        addcanclebtn.addEventListener('click', (event)=> {
-            event.preventDefault();
-            addFrom.classList.toggle('hidden')
-        })
-
-        editcanclebtn.addEventListener('click', (event)=> {
-            event.preventDefault();
-            editForm.classList.toggle('hidden')
-        })
-
-        $("form#addUser").submit(function() {            
-            var nameInput = $('input[name="name"]').val();
-            var addressInput = $('input[name="address"]').val();
-            var contactInput = $('input[name="contact_number"]').val();
-
-            if (nameInput && addressInput && contactInput) {
-                // Create Ajax Call
-                $.ajax({
-                    url: '{% url "crud_ajax_create_supplier" %}',
-                    data: {
-                        'name': nameInput,
-                        'address': addressInput,
-                        'contact_number': contactInput,
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.user) {
-                            appendToUsrTable(data.user);
-                        }
-                    }
-                });
-            } else {
-                alert("All fields must have a valid value.");
-            }
-            $('form#addUser').trigger("reset");
-            addFrom.classList.toggle('hidden');
-            return false;
-        });
-
-        function appendToUsrTable(user) {
-            $("#userTable > tbody:last-child").append(`
-                <tr id="user-${ user.id }">
-                    <td class="name userData" name="fname">${ user.name }</td>
-                    <td class="address userData" name="address">${ user.address }</td>
-                    <td class="contact_number userData" name="contact_number">${ user.contact_number }</td>
-                    <td class="text-right" style="padding: 10px;">
-                        <button onclick="editUser(${ user.id })" class="rm-background"><i class="material-icons" style="color: var(--edit_btn);">edit</i></button>
-                        <button onclick="deleteUser(${ user.id })" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);" >delete</i></button>
-                    </td>  
-                </tr>
-            `);
-        }
-
-        function updateToUserTabel(user){
-            $("#userTable #user-" + user.id).children(".userData").each(function() {
-                var attr = $(this).attr("name");
-                if (attr == "name") {
-                $(this).text(user.name);
-                } else if (attr == "address") {
-                $(this).text(user.address);
-                } else if (attr == "contact_number") {
-                $(this).text(user.contact_number);
-                }
-            });
-        }
-
-        $("form#updateUser").submit(function() {
-            var idInput2 = $('input[name="formId"]').val();
-            var nameInput2 = $('#form-name').val();
-            var addressInput2 = $('#form-address').val();
-            var contactInput2 = $('#form-contact-number').val();
-
-            if (nameInput2 && addressInput2 && contactInput2) {
-                // Create Ajax Call
-                $.ajax({
-                    url: '{% url "crud_ajax_update_supplier" %}',
-                    data: {
-                        'id':idInput2,
-                        'name': nameInput2,
-                        'address': addressInput2,
-                        'contact_number': contactInput2,
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.user) {
-                            updateToUserTabel(data.user);
-                        }
-                    }
-                });
-            } else {
-                alert("All fields must have a valid value.");
-            }
-            $('form#updateUser').trigger("reset");
-            editForm.classList.toggle('hidden');
-            return false;
-        });
-
-        // Update Django Ajax Call
-        function editUser(id) {
-            if(id) {
-                tr_id = "#user-" + id;
-                name = $(tr_id).find(".name").text();
-                address = $(tr_id).find(".address").text();
-                contact_number = $(tr_id).find(".contact_number").text();
-                $('#form-id').val(id);
-                $('#form-name').val(name);
-                $('#form-address').val(address);
-                $('#form-contact-number').val(contact_number);
-            }
-            editForm.classList.toggle('hidden');
-        }
 
         function deleteUser(id) {
             var action = confirm("Are you sure you want to delete this employee?");
@@ -403,7 +101,7 @@
                     dataType: 'json',
                     success: function (data) {
                         if (data.deleted) {
-                        $("#userTable #user-" + id).remove();
+                        $("#dataTable #user-" + id).remove();
                         }
                     }
                 });
