@@ -11,12 +11,9 @@ urlpatterns = [
     path('employee/new/', add_employee_view, name="add_employee"),
     path('employee/edit/<int:id>/', edit_employee_view, name="edit_employee"),
     path('supplier/', supplier_view, name="supplier"),
-    path('supplier/new', add_supplier_view, name="add_supplier"),
-    path('ajax/crud/create/', CreateCrudUserEmployee.as_view(), name='crud_ajax_create'),
-    path('ajax/crud/update/', UpdateCrudUserEmployee.as_view(), name='crud_ajax_update'),
+    path('supplier/new/', add_supplier_view, name="add_supplier"),
+    path('supplier/edit/<int:id>', edit_supplier_view, name="edit_supplier"),
     path('ajax/crud/delete/', DeleteCrudUserEmployee.as_view(), name='crud_ajax_delete'),
-    path('ajax/crud/create/supplier', CreateCrudUserSupplier.as_view(), name='crud_ajax_create_supplier'),
-    path('ajax/crud/update/supplier', UpdateCrudUserSupplier.as_view(), name='crud_ajax_update_supplier'),
     path('ajax/crud/delete/supplier', DeleteCrudUserSupplier.as_view(), name='crud_ajax_delete_supplier'),
 
 ]

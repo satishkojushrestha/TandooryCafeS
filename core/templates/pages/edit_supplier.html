@@ -2,7 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 
-{% block title %}Supplier{% endblock %}
+{% block title %}Supplier - Update{% endblock %}
 
 {% block cssandscripts %}   
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -54,16 +54,16 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="position">Address</label>
-                        <input class="form-control" type="text" name="position" placeholder="{{ edit_user.address }}" maxlength="30">
+                        <label for="address">Address</label>
+                        <input class="form-control" type="text" name="address" placeholder="{{ edit_user.address }}" maxlength="30">
                     </div>
         
                     <div class="form-group">
-                        <label for="salary">Contact Number</label>
-                        <input class="form-control" type="number" name="salary" placeholder="{{ edit_user.contact_number }}" maxlength="20">
+                        <label for="contact">Contact Number</label>
+                        <input class="form-control" type="number" name="contact" placeholder="{{ edit_user.contact_number }}" maxlength="20">
                     </div>
                     
-                    <button type="submit" class="btn btn-black">Update Employee</button>
+                    <button type="submit" class="btn btn-black">Update Supplier</button>
                 </form>
             </div>
         </div>

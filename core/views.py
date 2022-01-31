@@ -1,3 +1,4 @@
+import re
 from telnetlib import STATUS
 from turtle import position
 from django.shortcuts import render, redirect
@@ -7,7 +8,6 @@ from core.models import Supplier, User, Employee
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
-from datetime import datetime
 
 
 @login_required(login_url="/")
@@ -83,6 +83,7 @@ def update_profile(request):
 
     return render(request, "update_profile.html")
 
+@login_required(login_url="/")
 def employee_view(request):
     employeeForm = EmployeeForm()    
     return render(request, "pages/employee_detail.html", {
@@ -90,6 +91,7 @@ def employee_view(request):
         'employees': Employee.objects.all(),
     })
 
+@login_required(login_url="/")
 def add_employee_view(request):
     if request.method == "POST":
         employeeForm = EmployeeForm(request.POST)
@@ -113,6 +115,7 @@ def add_employee_view(request):
         'form': EmployeeForm(),
     })
 
+@login_required(login_url="/")
 def edit_employee_view(request, id):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -145,7 +148,7 @@ def edit_employee_view(request, id):
     except:
         return HttpResponse(status=404)
    
-
+@login_required(login_url="/")
 def supplier_view(request):
     supplierForm = SupplierForm()    
     return render(request, "pages/supplier_detail.html", {
@@ -153,7 +156,7 @@ def supplier_view(request):
         'suppliers': Supplier.objects.all(),
     })
 
-
+@login_required(login_url="/")
 def add_supplier_view(request):
     if request.method == "POST":
         form = SupplierForm(request.POST)
@@ -178,57 +181,39 @@ def add_supplier_view(request):
         "form":SupplierForm()
     })
 
+@login_required(login_url="/")
+def edit_supplier_view(request, id):
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        address = request.POST.get("address")
+        contact = request.POST.get("contact")
+        print(request.POST)
+        try:
+            update_supplier = Supplier.objects.get(id=id)
+            if first_name:
+                update_supplier.first_name = first_name
+            if last_name:
+                update_supplier.last_name = last_name
+            if address:
+                update_supplier.address = address
+            if contact:
+                update_supplier.contact_number = contact
+            update_supplier.save()
+            return redirect("supplier")
+        except:
+            return HttpResponse(status=404)
+    try:
+        get_supplier = Supplier.objects.get(id=id)   
+        return render(request, "pages/edit_supplier.html", {
+            'form': SupplierForm(),
+            'edit_user': get_supplier,
+        })  
+    except:
+        return HttpResponse(status=404)
 
-class CreateCrudUserEmployee(View):
 
-
-    def get(self, request):
-        name = request.GET.get('name', None)
-        position = request.GET.get('position', None)
-        age = request.GET.get('age', None)
-        salary = request.GET.get('salary', None)
-
-        new_employee = Employee(
-            name = name,
-            position = position,
-            age = age,
-            salary = salary
-        )
-
-        new_employee.save()
-
-        user_data = {'id':new_employee.id,'name':new_employee.name,'position':new_employee.position,'age':new_employee.age,'start_date':new_employee.start_date.strftime("%b. %d, %Y"),'salary':new_employee.salary}
-
-        data_user = {
-            'user': user_data
-        }
-
-        return JsonResponse(data_user)
-
-
-class UpdateCrudUserEmployee(View):
-
-    def get(self, request):
-        id = request.GET.get('id', None)
-        name = request.GET.get('name', None)
-        position = request.GET.get('position', None)
-        age = request.GET.get('age', None)
-        salary = request.GET.get('salary')
-        user = Employee.objects.get(id=id)
-        user.name = name
-        user.position = position
-        user.age = age
-        user.salary = salary
-        user.save()
-
-        user_data = {'id':id, 'name':user.name,'position':user.position,'age':user.age,'salary':user.salary}
-
-        data_user = {
-            'user': user_data
-        }
-
-        return JsonResponse(data_user)
-
+@login_required(login_url="/")
 class DeleteCrudUserEmployee(View):
     def  get(self, request):
         id1 = request.GET.get('id', None)
@@ -239,54 +224,7 @@ class DeleteCrudUserEmployee(View):
         return JsonResponse(data)
 
 
-class CreateCrudUserSupplier(View):
-
-
-    def get(self, request):
-        name = request.GET.get('name', None)
-        address = request.GET.get('address', None)
-        contact_number = request.GET.get('contact_number', None)
-
-        new_supplier = Supplier(
-            name = name,
-            address = address,
-            contact_number = contact_number,
-        )
-
-        new_supplier.save()
-
-        user_data = {'id':new_supplier.id,'name':new_supplier.name,'address':new_supplier.address,'contact_number':new_supplier.contact_number}
-
-        data_user = {
-            'user': user_data
-        }
-
-        return JsonResponse(data_user)
-
-
-
-class UpdateCrudUserSupplier(View):
-
-    def get(self, request):
-        id = request.GET.get('id', None)
-        name = request.GET.get('name', None)
-        address = request.GET.get('address', None)
-        contact_number = request.GET.get('contact_number', None)
-
-        user = Supplier.objects.get(id=id)
-        user.name = name
-        user.address = address
-        user.contact_number = contact_number
-        user.save()
-
-        user_data = {'id':id, 'name':user.name,'address':user.address,'contact_number':user.contact_number}
-
-        data_user = {
-            'user': user_data
-        }
-
-        return JsonResponse(data_user)
-
+@login_required(login_url="/")
 class DeleteCrudUserSupplier(View):
     def  get(self, request):
         id1 = request.GET.get('id', None)
