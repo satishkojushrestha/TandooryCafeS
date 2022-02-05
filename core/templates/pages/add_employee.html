@@ -28,6 +28,9 @@
     </style>
 {% endblock %}
 
+<!-- {% block employee_show %}show{% endblock %} -->
+
+
 {% block current_page %}Add Employee{% endblock %}
 
 {% block page_content %}
@@ -43,14 +46,14 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="firstname">First Name</label>
-                        {% render_field form.first_name %}
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="lastname">Last Name</label>
-                        {% render_field form.last_name %}
-                    </div>
+                        <div class="form-group col-md-6">
+                            <label for="firstname">First Name</label>
+                            {% render_field form.first_name %}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lastname">Last Name</label>
+                            {% render_field form.last_name %}
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="position">Position</label>

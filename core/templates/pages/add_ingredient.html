@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Ingredient{% endblock %}
+
+{% block cssandscripts %}   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #content{
+            background-color: #f4f5f9;
+        }
+
+        .form-control{
+            height: 50px;
+        }
+
+        .form-wrapper{
+            float: left;
+            width: 60%;
+            margin-left: 5%;
+            margin-top: 2%;
+        
+        }
+
+        .form-wrapper-2{
+            float: left;
+            width: 20%;
+            margin-left: 5%;
+            margin-top: 2%;
+        
+        }        
+
+        .main-wrapper{   
+            min-width: 80%;       
+            margin: 0;
+            padding: 0;
+            position: absolute;             
+        }        
+
+        .btn-black{
+            background-color: #456AD8;
+            color: white;
+        }
+
+        @media only screen and (max-width: 768px){
+            .form-control{
+                height: 35px;
+            }
+
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block current_page %}Add Ingredient{% endblock %}
+
+{% block page_content %}
+
+    <div class="main-wrapper">
+        <div class="form-wrapper">
+
+            <!-- Basic Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0">Add Ingredient</h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                       
+                        <div class="form-group">
+                            <label for="firstname">Name</label>
+                            {% render_field form.name class="form-control" %}
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Unit</label>
+                            {% render_field form.unit class="form-control" %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="position">Price per unit</label>
+                            {% render_field form.price_per_unit class="form-control" %}
+                        </div>
+                        <div class="form-group">
+                        <label for="age">Supplier</label>
+                        {% render_field form.supplier class="form-control" %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="salary">Quantity</label>
+                            {% render_field form.quantity class="form-control" %}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-black">Add Employee</button>
+                    </form>
+                </div>
+            </div>
+           
+        </div>
+    
+        <div class="form-wrapper-2">
+    
+            <!-- Basic Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0">Details</h6>
+                </div>
+                <div class="card-body">
+                    <h6>Total Stock: </h6>
+                    <h6>Total Price: </h6>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+
+    
+
+
+
+{% endblock %}

@@ -1,8 +1,9 @@
 import re
 from telnetlib import STATUS
 from turtle import position
+from django import forms
 from django.shortcuts import render, redirect
-from core.forms import EmployeeForm, LoginForm, SupplierForm
+from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm
 from django.contrib.auth import login, logout, authenticate
 from core.models import Supplier, User, Employee
 from django.contrib.auth.decorators import login_required
@@ -156,6 +157,23 @@ def supplier_view(request):
         'suppliers': Supplier.objects.all(),
     })
 
+
+@login_required(login_url="/")
+def ingredient_view(request):  
+    if request.method == "POST":
+        form = IngredientForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            return render(request, "pages/add_ingredient.html", {
+                "form":form
+            })
+        return redirect("add_ingredient")
+
+    return render(request, "pages/add_ingredient.html", {
+        "form":IngredientForm
+    })
+
 @login_required(login_url="/")
 def add_supplier_view(request):
     if request.method == "POST":
@@ -213,9 +231,8 @@ def edit_supplier_view(request, id):
         return HttpResponse(status=404)
 
 
-@login_required(login_url="/")
 class DeleteCrudUserEmployee(View):
-    def  get(self, request):
+    def get(self, request):
         id1 = request.GET.get('id', None)
         Employee.objects.get(id=id1).delete()
         data = {
@@ -224,9 +241,8 @@ class DeleteCrudUserEmployee(View):
         return JsonResponse(data)
 
 
-@login_required(login_url="/")
 class DeleteCrudUserSupplier(View):
-    def  get(self, request):
+    def get(self, request):
         id1 = request.GET.get('id', None)
         Supplier.objects.get(id=id1).delete()
         data = {

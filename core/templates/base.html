@@ -46,6 +46,11 @@
             font-size: 1rem;
             font-weight: 600;
         }
+
+        .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover{
+            background-color: black;
+        }
+
     </style>
     {% block cssandscripts %} {% endblock %}
     
@@ -106,11 +111,19 @@
                     <i class="material-icons">inventory_2</i>
                     <span>Ingredient</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+
+                <div id="collapseTwo" class="collapse {% block ingredient_show %} {% endblock %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded">                    
+                        <a class="collapse-item text-white" href="{% url 'add_ingredient' %}">Add Ingredient</a>
+                        <a class="collapse-item text-white" href="#">Ingredient</a>
+                    </div>
+                </div>
+
+                <!-- <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
                         <a class="collapse-item text-white" href="buttons.html">Add Ingredient</a>
                     </div>
-                </div>
+                </div> -->
             </li>
 
 
@@ -129,7 +142,15 @@
                     <i class="material-icons">badge</i>
                     <span>Employee</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded">                    
+                        <a class="collapse-item text-white" href="{% url 'add_employee' %}">Add Employee</a>
+                        <a class="collapse-item text-white" href="{% url 'employee' %}">Employee</a>
+                    </div>
+                </div>
+
+                <!-- <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
                         <a class="collapse-item text-white" href="{% url 'add_employee' %}">Add Employee</a>
                     </div>
@@ -138,7 +159,7 @@
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
                         <a class="collapse-item text-white" href="{% url 'employee' %}">Employees</a>
                     </div>
-                </div>
+                </div> -->
             </li>
 
             <li class="nav-item">
@@ -148,7 +169,14 @@
                     <span>Supplier</span>
                 </a>
 
-                <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="py-2 collapse-inner rounded">                    
+                        <a class="collapse-item text-white" href="{% url 'add_supplier' %}">Add Supplier</a>
+                        <a class="collapse-item text-white" href="{% url 'supplier' %}">Supplier</a>
+                    </div>
+                </div>
+
+                <!-- <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
                         <a class="collapse-item text-white" href="{% url 'add_supplier' %}">Add Supplier</a>
                     </div>
@@ -157,7 +185,7 @@
                     <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
                         <a class="collapse-item text-white" href="{% url 'supplier' %}">Supplier</a>
                     </div>
-                </div>
+                </div> -->
             </li>
 
             <!-- Divider -->

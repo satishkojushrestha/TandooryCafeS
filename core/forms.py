@@ -1,5 +1,5 @@
 from django import forms
-from core.models import User
+from core.models import User, Ingredient
 
 
 class LoginForm(forms.Form):
@@ -13,6 +13,7 @@ class LoginForm(forms.Form):
     class Meta:
         model = User
         fields = ('email', 'password')
+
 
 class EmployeeForm(forms.Form):
     first_name = forms.CharField(widget=forms.TextInput(
@@ -41,6 +42,7 @@ class EmployeeForm(forms.Form):
         'placeholder':'Salary'
         }), max_value=500000)
 
+
 class SupplierForm(forms.Form):
     first_name = forms.CharField(widget=forms.TextInput(
         attrs={
@@ -62,4 +64,11 @@ class SupplierForm(forms.Form):
         'class':'form-control',
         'placeholder':'Contact Number'
         }), required=True)
+
+
+class IngredientForm(forms.ModelForm):
+    class Meta:
+        model = Ingredient
+        fields = ['name', 'unit', 'price_per_unit', 'supplier', 'quantity']
+
 

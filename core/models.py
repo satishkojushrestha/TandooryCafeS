@@ -1,6 +1,4 @@
-from pyexpat import model
-from re import T
-from statistics import mode
+from tkinter.tix import Tree
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -30,3 +28,15 @@ class Supplier(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+
+class Ingredient(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+    unit = models.CharField(max_length=20)
+    price_per_unit = models.IntegerField()
+    supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT)    
+    time_stamp = models.DateField(auto_now_add=True)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.name
