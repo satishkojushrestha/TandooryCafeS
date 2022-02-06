@@ -242,7 +242,7 @@ class DeleteCrudUserSupplier(View):
         }
         return JsonResponse(data)
 
-
+@login_required(login_url="/")
 def ingredient_view(request):
     return render(request, "pages/ingredient_detail.html",{
         'ingredients':Ingredient.objects.all(),
@@ -256,3 +256,38 @@ class DeleteCrudIngredient(View):
             'deleted': True
         }
         return JsonResponse(data)
+
+@login_required(login_url="/")
+def edit_ingredient_view(request, id):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        unit = request.POST.get("unit")
+        price_per_unit = request.POST.get("price-per-unit")
+        supplier_id = request.POST.get("supplier")
+        quantity = request.POST.get("quantity")
+        print(request.POST)
+        try:
+            update_ingredient = Ingredient.objects.get(id=id)
+            if name:
+                update_ingredient.name = name
+            if unit:
+                update_ingredient.unit = unit
+            if price_per_unit:
+                update_ingredient.price_per_unit = price_per_unit
+            if supplier_id:
+                get_supplier = Supplier.objects.get(id=supplier_id)
+                update_ingredient.supplier = get_supplier
+            if quantity:
+                update_ingredient.quantity = quantity
+            update_ingredient.save()
+            return redirect("ingredient")
+        except:
+            return HttpResponse(status=404)
+    try:
+        get_ingredient = Ingredient.objects.get(id=id)   
+        return render(request, "pages/edit_ingredient.html", {
+            'edit_ingredient': get_ingredient,
+            'suppliers': Supplier.objects.all(),
+        })  
+    except:
+        return HttpResponse(status=404)

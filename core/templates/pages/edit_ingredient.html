@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Ingredient - Update{% endblock %}
+
+{% block cssandscripts %}   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #content{
+            background-color: #f4f5f9;
+        }
+
+        .form-control{
+            height: 50px;
+        }
+
+        .form-wrapper{
+            width: 80%;
+            margin-left: 5%;
+            margin-top: 5%;
+        }
+
+        .btn-black{
+            background-color: #456AD8;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+
+{% block current_page %}Edit Ingreient{% endblock %}
+
+{% block page_content %}
+
+    <div class="form-wrapper">
+
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0">Edit Ingredient Detail</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="name">Name</label>
+                        <input class="form-control" type="text" name="name" placeholder="{{ edit_ingredient.name }}" maxlength="20">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="unit">Unit</label>
+                        <input class="form-control" type="text" name="unit" placeholder="{{ edit_ingredient.unit }}" maxlength="20">
+                    </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price-per-unit">Price Per Unit</label>
+                        <input class="form-control" type="text" name="price-per-unit" placeholder="{{ edit_ingredient.price_per_unit }}" maxlength="30">
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="supplier">Supplier</label>
+                        <select name="supplier" class="form-control">
+                            {% for supplier in suppliers %}
+                                <option value="{{supplier.id}}">{{ supplier.first_name }} {{ supplier.last_name }}</option>
+                            {% endfor %}
+                          </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input class="form-control" type="number" name="quantity" placeholder="{{ edit_ingredient.quantity }}" maxlength="20">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-black">Update Supplier</button>
+                </form>
+            </div>
+        </div>
+       
+    </div>
+
+
+
+{% endblock %}
