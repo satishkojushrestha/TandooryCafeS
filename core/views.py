@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Supplier, User, Employee
+from core.models import Ingredient, Supplier, User, Employee
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
@@ -244,4 +244,15 @@ class DeleteCrudUserSupplier(View):
 
 
 def ingredient_view(request):
-    return render(request, )
+    return render(request, "pages/ingredient_detail.html",{
+        'ingredients':Ingredient.objects.all(),
+    })
+
+class DeleteCrudIngredient(View):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Ingredient.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)

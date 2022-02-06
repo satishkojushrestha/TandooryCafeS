@@ -65,7 +65,7 @@
                                     </tfoot>
                                     <tbody>
                                         {% for ingredient in ingredients %}
-                                            <tr id="user-{{ user.id }}">
+                                            <tr id="ingredient-{{ ingredient.id }}">
                                                 <td>{{ ingredient.name }}</td>
                                                 <td>{{ ingredient.unit }}</td>
                                                 <td>{{ ingredient.price_per_unit }}</td>
@@ -105,14 +105,14 @@
             var action = confirm("Are you sure you want to delete this ingredient?");
             if (action != false) {
                 $.ajax({
-                    url: '{% url "crud_ajax_delete" %}',
+                    url: '{% url "crud_ajax_delete_ingredient" %}',
                     data: {
                         'id': id,
                     },
                     dataType: 'json',
                     success: function (data) {
                         if (data.deleted) {
-                        $("#dataTable #user-" + id).remove();
+                        $("#dataTable #ingredient-" + id).remove();
                         }
                     }
                 });
