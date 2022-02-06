@@ -2,7 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 
-{% block title %}Ingredient{% endblock %}
+{% block title %}Add Ingredient{% endblock %}
 
 {% block cssandscripts %}   
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -41,6 +41,14 @@
         .btn-black{
             background-color: #456AD8;
             color: white;
+        }
+
+        .btn-black:hover{
+            color:#e1e1e1;
+        }
+
+        .link{
+            margin-left: 10px;
         }
 
         @media only screen and (max-width: 768px){
@@ -93,7 +101,8 @@
                             {% render_field form.quantity class="form-control" %}
                         </div>
                         
-                        <button type="submit" class="btn btn-black">Add Employee</button>
+                        <button type="submit" class="btn btn-black">Add Ingredient</button>
+                        <a href="#" class="link"> Ingredients </a>
                     </form>
                 </div>
             </div>

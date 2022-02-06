@@ -1,7 +1,3 @@
-import re
-from telnetlib import STATUS
-from turtle import position
-from django import forms
 from django.shortcuts import render, redirect
 from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm
 from django.contrib.auth import login, logout, authenticate
@@ -85,10 +81,8 @@ def update_profile(request):
     return render(request, "update_profile.html")
 
 @login_required(login_url="/")
-def employee_view(request):
-    employeeForm = EmployeeForm()    
+def employee_view(request):    
     return render(request, "pages/employee_detail.html", {
-        'form': employeeForm,
         'employees': Employee.objects.all(),
     })
 
@@ -150,16 +144,14 @@ def edit_employee_view(request, id):
         return HttpResponse(status=404)
    
 @login_required(login_url="/")
-def supplier_view(request):
-    supplierForm = SupplierForm()    
+def supplier_view(request):  
     return render(request, "pages/supplier_detail.html", {
-        'form': supplierForm,
         'suppliers': Supplier.objects.all(),
     })
 
 
 @login_required(login_url="/")
-def ingredient_view(request):  
+def add_ingredient_view(request):  
     if request.method == "POST":
         form = IngredientForm(request.POST)
         if form.is_valid():
@@ -249,3 +241,7 @@ class DeleteCrudUserSupplier(View):
             'deleted': True
         }
         return JsonResponse(data)
+
+
+def ingredient_view(request):
+    return render(request, )

@@ -47,9 +47,14 @@
             font-weight: 600;
         }
 
-        .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover{
+        /* .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover{
+            background-color: black;
+        } */
+
+        .sidebar{            
             background-color: black;
         }
+
 
     </style>
     {% block cssandscripts %} {% endblock %}
@@ -63,7 +68,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
@@ -144,9 +149,9 @@
                 </a>
 
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="py-2 collapse-inner rounded">                    
-                        <a class="collapse-item text-white" href="{% url 'add_employee' %}">Add Employee</a>
-                        <a class="collapse-item text-white" href="{% url 'employee' %}">Employee</a>
+                    <div class="bg-white py-2 collapse-inner rounded">                    
+                        <a class="collapse-item" href="{% url 'add_employee' %}">Add Employee</a>
+                        <a class="collapse-item" href="{% url 'employee' %}">Employee</a>
                     </div>
                 </div>
 
