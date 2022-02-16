@@ -1,7 +1,8 @@
+from unicodedata import category
 from django.shortcuts import render, redirect
-from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm
+from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Ingredient, Supplier, User, Employee
+from core.models import Food, Ingredient, Supplier, User, Employee, Category
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
@@ -291,3 +292,24 @@ def edit_ingredient_view(request, id):
         })  
     except:
         return HttpResponse(status=404)
+
+@login_required(login_url="/")
+def add_food_view(request):
+    if request.method == 'POST':
+        form = FoodForm(request.POST)
+        if form.is_valid():
+            form_data = form.cleaned_data
+            name = form_data.get("name")
+            category = form_data.get("category")
+            price = form_data.get("price")
+            get_category = Category.objects.get(name=category)
+            new_food = Food(
+                name = name,
+                category = get_category,
+                price = price
+            )
+            new_food.save()
+            return redirect('add_food')
+        return render(request, 'pages/add_food.html', {'form':form})
+
+    return render(request, 'pages/add_food.html', {'form':FoodForm})

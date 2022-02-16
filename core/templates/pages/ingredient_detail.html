@@ -43,6 +43,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th class="sorting_asc_disabled sorting_desc_disabled text-center">Qr Code</th>
                                             <th>Name</th>
                                             <th>Unit</th>
                                             <th>Price Per Unit</th>
@@ -54,6 +55,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                            <th class="text-center">Qr Code</th>
                                             <th>Name</th>
                                             <th>Unit</th>
                                             <th>Price Per Unit</th>
@@ -66,6 +68,7 @@
                                     <tbody>
                                         {% for ingredient in ingredients %}
                                             <tr id="ingredient-{{ ingredient.id }}">
+                                                <td class="text-center"><a href="{{ ingredient.qr.url }}" target="blank"><img src="{{ ingredient.qr.url }}" alt="{{ ingredient.name }}" style="height: 80px; width: 80px;"></a></td>
                                                 <td>{{ ingredient.name }}</td>
                                                 <td>{{ ingredient.unit }}</td>
                                                 <td>{{ ingredient.price_per_unit }}</td>

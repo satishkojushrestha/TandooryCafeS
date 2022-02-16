@@ -72,9 +72,9 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
+                <!-- <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
-                </div>
+                </div> -->
                 <div class="sidebar-brand-text mx-3">LOGO</div>
             </a>
 
@@ -103,9 +103,10 @@
                     <i class="material-icons">fastfood</i>
                     <span>Food</span>
                 </a>
-                <div id="collapse" class="collapse" aria-labelledby="heading" data-parent="#accordionSidebar">
-                    <div id="text-nav" class="py-2 collapse-inner " style="height: 2rem;">
-                        <a class="collapse-item text-white" href="buttons.html">Add Food</a>
+                <div id="collapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">                    
+                        <a class="collapse-item" href="#">Add Food</a>
+                        <a class="collapse-item" href="#">Food</a>
                     </div>
                 </div>
             </li>
@@ -118,9 +119,9 @@
                 </a>
 
                 <div id="collapseTwo" class="collapse {% block ingredient_show %} {% endblock %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="py-2 collapse-inner rounded">                    
-                        <a class="collapse-item text-white" href="{% url 'add_ingredient' %}">Add Ingredient</a>
-                        <a class="collapse-item text-white" href="{% url 'ingredient' %}">Ingredient</a>
+                    <div class="bg-white py-2 collapse-inner rounded">                    
+                        <a class="collapse-item" href="{% url 'add_ingredient' %}">Add Ingredient</a>
+                        <a class="collapse-item" href="{% url 'ingredient' %}">Ingredient</a>
                     </div>
                 </div>
 
@@ -175,9 +176,9 @@
                 </a>
 
                 <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="py-2 collapse-inner rounded">                    
-                        <a class="collapse-item text-white" href="{% url 'add_supplier' %}">Add Supplier</a>
-                        <a class="collapse-item text-white" href="{% url 'supplier' %}">Supplier</a>
+                    <div class="bg-white py-2 collapse-inner rounded">                    
+                        <a class="collapse-item" href="{% url 'add_supplier' %}">Add Supplier</a>
+                        <a class="collapse-item" href="{% url 'supplier' %}">Supplier</a>
                     </div>
                 </div>
 

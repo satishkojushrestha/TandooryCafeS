@@ -68,3 +68,19 @@ class Ingredient(models.Model):
         self.qr.save(fname, File(buffer), save=False)
         canvas.close()
         super(Ingredient, self).save(*args, **kwargs)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=10)
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+
+class Food(models.Model):
+    name = models.CharField(max_length=20)
+    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    price = models.IntegerField()
+
+    def __str__(self) -> str:
+        return str(self.name)
