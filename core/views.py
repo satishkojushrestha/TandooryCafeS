@@ -313,3 +313,14 @@ def add_food_view(request):
         return render(request, 'pages/add_food.html', {'form':form})
 
     return render(request, 'pages/add_food.html', {'form':FoodForm})
+
+@login_required(login_url="/")
+def add_category_view(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()            
+            return redirect('add_category')
+        else:
+            return render(request, 'pages/add_category.html', {'form':form, 'categories': Category.objects.all()})
+    return render(request, 'pages/add_category.html', {'form':CategoryForm, 'categories': Category.objects.all()})

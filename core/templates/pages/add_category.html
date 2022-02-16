@@ -2,7 +2,7 @@
 {% load static %}
 {% load widget_tweaks %}
 
-{% block title %}Add Food{% endblock %}
+{% block title %}Add Category{% endblock %}
 
 {% block cssandscripts %}   
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -67,7 +67,7 @@
 {% endblock %}
 
 
-{% block current_page %}Add Food{% endblock %}
+{% block current_page %}Add Category{% endblock %}
 
 {% block page_content %}
 
@@ -77,32 +77,20 @@
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0">Add Food</h6>
+                    <h6 class="m-0">Add Category</h6>
                 </div>
                 <div class="card-body">
                     <form method="POST">
                         {% csrf_token %}
                        
-                        <div class="form-group">                            
+                        <div class="form-group">
                             <label for="firstname">Name</label>
                             {% render_field form.name class="form-control" %}
-                            {{ form.name.errors }}
-                        </div>
-                        <div class="form-group">
-                            {{ form.category.errors }}
-                            <label for="lastname">Category</label>
-                            {% render_field form.category class="form-control" %}
-                        </div>
-
-                        <div class="form-group">
-                            {{ form.price.errors }}
-                            <label for="position">Price</label>
-                            {% render_field form.price class="form-control" %}
                         </div>
 
                         
-                        <button type="submit" class="btn btn-black">Add Food</button>
-                        <a href="#" class="link"> Foods </a>
+                        <button type="submit" class="btn btn-black">Add Category</button>
+                        <a href="{% url 'add_food' %}" class="link"> Back </a>
                     </form>
                 </div>
             </div>
@@ -114,10 +102,12 @@
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0">Options</h6>
+                    <h6 class="m-0">Category's</h6>
                 </div>
                 <div class="card-body">
-                    <h6><a href="{% url 'add_category' %}">Add Category</a></h6>
+                    {% for category in categories %}
+                        <h6>{{ category.name }}</h6>
+                    {% endfor %}
                 </div>
             </div>
     
