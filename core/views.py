@@ -329,3 +329,13 @@ def food_view(request):
     return render(request, "pages/food_detail.html",{
         'foods':Food.objects.all(),
     })
+
+
+class DeleteCrudFood(View):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Food.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
