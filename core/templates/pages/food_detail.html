@@ -64,7 +64,7 @@
                                                 <td>{{ food.category.name }}</td>
                                                 <td>{{ food.price }}</td>
                                                 <td class="text-right" style="padding: 10px;">
-                                                    <a href="#"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
+                                                    <a href="{% url 'edit_food' food.id %}"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
                                                     <button onclick="deleteFood({{ food.id }})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);">delete</i></button>
                                                 </td>                                            
                                             </tr>

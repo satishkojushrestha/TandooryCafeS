@@ -339,3 +339,33 @@ class DeleteCrudFood(View):
             'deleted': True
         }
         return JsonResponse(data)
+
+
+@login_required(login_url="/")
+def edit_food_view(request, id):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        category_id = request.POST.get("category")
+        price = request.POST.get("price")
+        try:
+            update_food = Food.objects.get(id=id)
+            if name:
+                update_food.name = name
+            if price:
+                update_food.price = price
+            if category_id:
+                get_category = Category.objects.get(id=category_id)
+                update_food.category = get_category
+            update_food.save()
+            return redirect("food")
+        except:
+            return HttpResponse(status=404)
+    try:
+        get_food = Food.objects.get(id=id)
+        print(get_food)
+        return render(request, "pages/edit_food.html", {
+            'edit_food': get_food,
+            'categories': Category.objects.all(),
+        }) 
+    except:
+        return HttpResponse(status=404)

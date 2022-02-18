@@ -62,8 +62,12 @@
                     <div class="form-group">
                         <label for="supplier">Supplier</label>
                         <select name="supplier" class="form-control">
+                            <option value="{{ edit_ingredient.supplier.id }}"> {{ edit_ingredient.supplier.first_name }} {{ edit_ingredient.supplier.last_name }} </option>
                             {% for supplier in suppliers %}
+                                {% if supplier == edit_ingredient.supplier %}
+                                {% else %}
                                 <option value="{{supplier.id}}">{{ supplier.first_name }} {{ supplier.last_name }}</option>
+                                {% endif %}
                             {% endfor %}
                           </select>
                     </div>

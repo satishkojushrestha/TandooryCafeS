@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.urls import path
 from .views import *
 
@@ -23,4 +24,5 @@ urlpatterns = [
     path('addcategory/', add_category_view, name="add_category"),
     path('food/',food_view, name="food"),
     path('ajax/crud/delete/food/', DeleteCrudFood.as_view(), name='crud_ajax_delete_food'),
+    path('food/edit/<int:id>', edit_food_view, name="edit_food"),
 ]
