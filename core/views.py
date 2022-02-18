@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.shortcuts import render, redirect
 from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
@@ -324,3 +323,9 @@ def add_category_view(request):
         else:
             return render(request, 'pages/add_category.html', {'form':form, 'categories': Category.objects.all()})
     return render(request, 'pages/add_category.html', {'form':CategoryForm, 'categories': Category.objects.all()})
+
+@login_required(login_url="/")
+def food_view(request):
+    return render(request, "pages/food_detail.html",{
+        'foods':Food.objects.all(),
+    })
