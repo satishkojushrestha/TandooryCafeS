@@ -1,3 +1,4 @@
+from typing import OrderedDict
 from unicodedata import name
 from django.urls import path
 from .views import *
@@ -25,4 +26,6 @@ urlpatterns = [
     path('food/',food_view, name="food"),
     path('ajax/crud/delete/food/', DeleteCrudFood.as_view(), name='crud_ajax_delete_food'),
     path('food/edit/<int:id>', edit_food_view, name="edit_food"),
+    path('order/', order_view, name='order'),
+    path('ajax/crud/create/order/', AddOrder.as_view(), name='c_ajax_create_order'),
 ]

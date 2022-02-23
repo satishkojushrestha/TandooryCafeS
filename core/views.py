@@ -369,3 +369,28 @@ def edit_food_view(request, id):
         }) 
     except:
         return HttpResponse(status=404)
+
+
+def order_view(request):
+    return render(request,'pages/order.html', {
+        'foods':Food.objects.all(),
+    })
+
+
+class AddOrder(View):
+    def get(self, request):
+        id = request.GET.get('id', None)
+        quantity = request.GET.get('quantity', None)
+        food = Food.objects.get(id=id)
+        print(food)
+        print(quantity)
+        c_data = {
+            'food_name': food.name,
+            'quantity': quantity,
+            'price': 100
+        }
+
+        order_data = {
+            'order': c_data
+        }
+        return JsonResponse(order_data)

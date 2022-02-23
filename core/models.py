@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 #for generating qr code
@@ -81,6 +82,7 @@ class Food(models.Model):
     name = models.CharField(max_length=20)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     price = models.IntegerField()
+    image = models.ImageField(upload_to='foods', default="foods/braed.jpg")
 
     def __str__(self) -> str:
         return str(self.name)
