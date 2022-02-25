@@ -191,7 +191,7 @@
                                                 <td style="border: transparent;">
                                                     <li>Name: {{ food.name }}</li>
                                                     <li>Category: {{ food.category.name }}</li>
-                                                    <li>Proce: {{ food.price }}</li>
+                                                    <li>Price: <span class="price">{{ food.price }}</span></li>
                                                 </td>
                                                 <td style="border: transparent;">
                                                     <div  style="height: 35px; width:auto;" class="btn btn-primary" onclick="addOrder({{ food.id }})">Add Order</div>
@@ -217,10 +217,10 @@
                     <th>Price</th>
                 </tr>
                 {% for order in orders %}
-                    <tr>
-                        <td>{{ order.food.name }}</td>
-                        <td>{{ order.quantity }}</td>
-                        <td>{{ order.price }}</td>
+                    <tr id="food-order-{{order.food.id}}">
+                        <td class="name foodData" name="name">{{ order.food.name }}</td>
+                        <td class="quantity foodData" name="quantity">{{ order.quantity }}</td>
+                        <td class="price foodData" name="price">{{ order.price }}</td>
                     </tr>
                 {% endfor %}
                 
@@ -263,13 +263,38 @@
     //     document.getElementById('number').value = value;
     // }
 
+    function updateOrder(id, price){
+        $("#orderTable #food-order-" + id).children(".foodData").each(function() {
+            var attr = $(this).attr("name");
+            if (attr == "quantity") {
+                current_quantity = parseInt($(food_order_id).find(".quantity").text())                        
+                $(this).text(current_quantity+1);
+            } else if (attr == "price") {
+                current_price = parseInt($(food_order_id).find(".price").text())                
+                $(this).text(current_price+price);
+            }
+        });
+    }
+
     function addOrder(id) {
         if(id) {
+            
             console.log(`function called ${id}`)
             tr_id = "#food-" + id;
             quantity = 3
+            price = parseInt($(tr_id).find(".price").text())
+            // console.log(price)
 
-            $.ajax({
+            food_order_id = "#food-order-" + id
+            data = $(food_order_id).find(".name").text()
+            if(data){
+                // console.log(data)
+                // console.log("Data Exist")
+                updateOrder(id, price)  
+            }
+
+            else{
+                $.ajax({
                     url: '{% url "c_ajax_create_order" %}',
                     data: {
                         'id': id,
@@ -282,6 +307,9 @@
                         }
                     }
                 });
+            }
+        
+                      
         }
         else{
             alert("There is some error")
@@ -290,11 +318,10 @@
 
     function appendToOrderTable(order) {
         $("#orderTable > tbody:last-child").append(`
-                <tr>
-                    <td>${ order.food_name }</td>
-                    <td>${ order.quantity }</td>
-                    <td>${ order.price }</td>
-                </tr>
+            <tr id="food-order-${order.id}">
+                <td class="name foodData" name="name">${ order.food_name }</td>
+                <td class="quantity foodData" name="quantity">${ order.quantity }</td>
+                <td class="price foodData" name="price">${ order.price }</td>
             </tr>
         `);
     }

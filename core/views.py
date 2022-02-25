@@ -385,6 +385,7 @@ class AddOrder(View):
         print(food)
         print(quantity)
         c_data = {
+            'id':food.id,
             'food_name': food.name,
             'quantity': quantity,
             'price': 100

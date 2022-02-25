@@ -39,7 +39,7 @@ class Supplier(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(max_length=20, unique=True)
     unit = models.CharField(max_length=20)
-    price_per_unit = models.IntegerField()
+    price_per_unit = models.PositiveIntegerField()
     supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT)    
     time_stamp = models.DateField(auto_now_add=True)
     quantity = models.IntegerField()
@@ -81,8 +81,8 @@ class Category(models.Model):
 class Food(models.Model):
     name = models.CharField(max_length=20)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
-    price = models.IntegerField()
-    image = models.ImageField(upload_to='foods', default="foods/braed.jpg")
+    price = models.PositiveIntegerField()
+    image = models.ImageField(upload_to='foods', default="foods/default3.svg")
 
     def __str__(self) -> str:
         return str(self.name)
