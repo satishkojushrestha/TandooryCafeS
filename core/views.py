@@ -10,8 +10,8 @@ from django.views.generic import UpdateView
 
 
 @login_required(login_url="/")
-def base_view(request):
-    return render(request, "base.html")
+def dashboard_view(request):
+    return render(request, "index.html")
 
 def logoutView(request):
     logout(request)
@@ -19,7 +19,7 @@ def logoutView(request):
 
 def loginView(request):
     if request.user.is_authenticated:
-        return redirect("base")
+        return redirect("dashboard")
 
     if request.method == "POST":
         form = LoginForm(request.POST)
@@ -390,7 +390,7 @@ class AddOrder(View):
             'id':food.id,
             'food_name': food.name,
             'quantity': quantity,
-            'price': 100
+            'price': food.price
         }
 
         order_data = {

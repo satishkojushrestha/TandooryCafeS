@@ -37,6 +37,8 @@
 
 {% block page_content %}
 
+    <div class="container-fluid">
+
     <div class="form-wrapper">
 
         <!-- Basic Card Example -->
@@ -53,14 +55,14 @@
                         {% render_field form.name class="form-control" %}
                     </div>
                     
-                    <button type="submit" class="btn btn-black">Update Category</button>
+                    <button type="submit" class="btn btn-success">Update Category</button>
                     <a href="{% url 'delete_category' object.id %}" class="btn btn-danger">Delete</a>
                 </form>
             </div>
         </div>
        
     </div>
-
+    </div>
 
 
 {% endblock %}
