@@ -106,7 +106,7 @@
                 </div>
                 <div class="card-body">
                     {% for category in categories %}
-                        <h6>{{ category.name }}</h6>
+                        <h6><a href="{% url 'edit_category' category.id %}">{{ category.name }}</a></h6>
                     {% endfor %}
                 </div>
             </div>

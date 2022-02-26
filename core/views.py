@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
 from core.models import Food, Ingredient, Supplier, User, Employee, Category
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
+from django.views.generic import UpdateView
 
 
 @login_required(login_url="/")
@@ -395,3 +397,16 @@ class AddOrder(View):
             'order': c_data
         }
         return JsonResponse(order_data)
+
+
+class CategoryUpdateView(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'pages/edit_category.html'
+
+    def get_success_url(self):
+        return reverse('add_category')
+    
+def delete_category(request, id):
+    category = Category.objects.get(id=id).delete()
+    return redirect('add_category')

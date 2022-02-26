@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Category - Update{% endblock %}
+
+{% block cssandscripts %}   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #content{
+            background-color: #f4f5f9;
+        }
+
+        .form-control{
+            height: 50px;
+        }
+
+        .form-wrapper{
+            width: 80%;
+            margin-left: 5%;
+            margin-top: 5%;
+        }
+
+        .btn-black{
+            background-color: #456AD8;
+            color: white;
+        }
+
+        .btn-black:hover{
+            color:#e1e1e1;
+        }
+    </style>
+{% endblock %}
+
+
+{% block current_page %}Edit Category{% endblock %}
+
+{% block page_content %}
+
+    <div class="form-wrapper">
+
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0">Edit Category Detail</h6>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        {% render_field form.name class="form-control" %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-black">Update Category</button>
+                    <a href="{% url 'delete_category' object.id %}" class="btn btn-danger">Delete</a>
+                </form>
+            </div>
+        </div>
+       
+    </div>
+
+
+
+{% endblock %}

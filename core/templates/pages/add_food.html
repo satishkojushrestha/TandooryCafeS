@@ -102,7 +102,7 @@
 
                         
                         <button type="submit" class="btn btn-black">Add Food</button>
-                        <a href="#" class="link"> Foods </a>
+                        
                     </form>
                 </div>
             </div>
@@ -117,7 +117,10 @@
                     <h6 class="m-0">Options</h6>
                 </div>
                 <div class="card-body">
-                    <h6><a href="{% url 'add_category' %}">Add Category</a></h6>
+                
+                    <h6 style="margin-left: 8px;"><a href="{% url 'add_category' %}">Add Category</a></h6>
+                    <h6 style="margin: 0;padding: 0;"><a href="{% url 'food' %}" class="link">Foods</a></h6>
+                    
                 </div>
             </div>
     

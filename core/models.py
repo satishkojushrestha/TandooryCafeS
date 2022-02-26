@@ -20,7 +20,7 @@ class Employee(models.Model):
     position = models.CharField(max_length=30)
     age = models.CharField(max_length=3)
     start_date = models.DateField(auto_now_add=True)
-    salary = models.IntegerField()
+    salary = models.PositiveIntegerField()
     
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -42,7 +42,7 @@ class Ingredient(models.Model):
     price_per_unit = models.PositiveIntegerField()
     supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT)    
     time_stamp = models.DateField(auto_now_add=True)
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField()
     qr = models.ImageField(upload_to='qr_codes', blank=True)
 
     def __str__(self):
@@ -80,7 +80,7 @@ class Category(models.Model):
 
 class Food(models.Model):
     name = models.CharField(max_length=20)
-    category = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.PositiveIntegerField()
     image = models.ImageField(upload_to='foods', default="foods/default3.svg")
 
