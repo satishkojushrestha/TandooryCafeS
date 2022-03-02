@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Food, Ingredient, Supplier, User, Employee, Category
+from core.models import Charges, Food, Ingredient, Order, OrderFood, Supplier, User, Employee, Category
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
@@ -18,7 +18,7 @@ def logoutView(request):
     return redirect("login")
 
 def loginView(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated:        
         return redirect("dashboard")
 
     if request.method == "POST":
@@ -31,7 +31,8 @@ def loginView(request):
                 auth_user = authenticate(request, username=user.username, password=password)
                 if auth_user is not None:
                     login(request, auth_user)
-                    return redirect("base")
+                    return redirect("dashboard")
+
                 else:
                     return render(request, "authentication/login.html", {
                         'message': 'Invalid Credential',
@@ -42,6 +43,7 @@ def loginView(request):
                         'message': 'Invalid Username and Password',
                         'forms': LoginForm(request.POST),
                     })
+
     return render(request, "authentication/login.html", {"forms":LoginForm})
 
 @login_required(login_url="/")
@@ -372,25 +374,67 @@ def edit_food_view(request, id):
     except:
         return HttpResponse(status=404)
 
-
+@login_required(login_url="/")
 def order_view(request):
     return render(request,'pages/order.html', {
         'foods':Food.objects.all(),
     })
+
+def calculate_charges(total_amount):
+    charges = Charges.objects.get(id=1)
+    vat = charges.vat
+    serv_charge = charges.service_charge
+    vat_amt =(total_amount*vat)/100
+    serv_amt =(total_amount*serv_charge)/100
+    net_price = total_amount + vat_amt + serv_amt
+    return net_price
+
 
 
 class AddOrder(View):
     def get(self, request):
         id = request.GET.get('id', None)
         quantity = request.GET.get('quantity', None)
-        food = Food.objects.get(id=id)
-        print(food)
-        print(quantity)
+        order_id = request.GET.get('order_id', None)
+        food = Food.objects.get(id=id)  
+        if order_id:
+            order = Order.objects.get(id=order_id)
+            food_order = OrderFood.objects.filter(order=order)
+            food_order_found = 0
+            for orders in food_order:
+                if orders.food.id == food.id:
+                    food_order_found += 1
+                    orders.quantity += 1
+                    orders.price = orders.food.price * orders.quantity
+                    orders.save()
+                    order.total += food.price
+                    order.save()
+                    break
+
+            if food_order_found == 0:
+                order_food = OrderFood(order=order, food=food, quantity=1, price=food.price)
+                order_food.save()
+                order.total += food.price
+                order.save()
+        else:                  
+            order = Order(order_description="Order in process.", total=0, ordered=False)
+            order.total += food.price        
+            order.save()                
+            order_food = OrderFood(order=order, food=food, quantity=1, price=food.price)
+            order_food.save()
+        
+        total_price = calculate_charges(order.total)
+        charges = Charges.objects.get(id=1)        
         c_data = {
             'id':food.id,
             'food_name': food.name,
             'quantity': quantity,
-            'price': food.price
+            'price': food.price,
+            'order_id': order.id,
+            'order_total': order.total,
+            'vat': charges.vat,
+            'serv_charge': charges.service_charge,
+            'total_price': total_price
         }
 
         order_data = {

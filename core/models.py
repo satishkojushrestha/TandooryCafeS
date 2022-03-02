@@ -1,4 +1,5 @@
 from email.policy import default
+from statistics import mode
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 #for generating qr code
@@ -86,3 +87,28 @@ class Food(models.Model):
 
     def __str__(self) -> str:
         return str(self.name)
+
+class Charges(models.Model):
+    vat = models.IntegerField()
+    service_charge = models.IntegerField()
+    discount = models.IntegerField()
+
+
+class Order(models.Model):
+    order_description = models.CharField(max_length=150)
+    time_stamp = models.DateTimeField(auto_created=True, auto_now_add=True)
+    total = models.IntegerField(default=0)
+    ordered = models.BooleanField()
+
+    def __str__(self):
+        return str(self.id)
+
+
+class OrderFood(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f" {self.order.id} -> {self.food.name}"
