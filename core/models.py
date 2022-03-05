@@ -47,8 +47,8 @@ class Ingredient(models.Model):
     qr = models.ImageField(upload_to='qr_codes', blank=True)
 
     def __str__(self):
-        return str(self.pk)
-        # return self.name
+        # return str(self.pk)
+        return self.name
 
     def save(self, *args, **kwargs):
         db_count = Ingredient.objects.count()
@@ -69,7 +69,7 @@ class Ingredient(models.Model):
         canvas.save(buffer,'PNG')
         self.qr.save(fname, File(buffer), save=False)
         canvas.close()
-        super(Ingredient, self).save(*args, **kwargs)
+        super(Ingredient, self).save(*args, **kwargs)        
 
 
 class Category(models.Model):
@@ -115,10 +115,16 @@ class OrderFood(models.Model):
 
 
 class FoodIngredient(models.Model):
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)   
+
+    def __str__(self):
+        return self.food.name 
 
 
 class FoodIngBridge(models.Model):
     food_ing = models.ForeignKey(FoodIngredient, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()    
+    quantity = models.PositiveIntegerField()   
+
+    def __str__(self):
+        return f"{self.food_ing} - {self.ingredient}" 

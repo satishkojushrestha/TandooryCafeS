@@ -68,7 +68,7 @@
 {% endblock %}
 
 {% block current_page %}
-Order #1
+Order #{{ order.id }}
 {% endblock %}
 
 {% block page_content %}
@@ -103,7 +103,7 @@ Order #1
 									<div class="row">
 										<div class="col-xs-12">
 											<h2>invoice<br>
-											<span class="small">order #1</span></h2>
+											<span class="small">order #{{ order.id }}</span></h2>
 										</div>
 									</div>
 								</div>
@@ -119,7 +119,7 @@ Order #1
 									<div class="col-6 text-right">
 										<address>
 											<strong>Order Date:</strong><br>
-											17/06/2021
+											{{ order.time_stamp }}
 										</address>
 									</div>
 								</div>
@@ -137,26 +137,17 @@ Order #1
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>1</td>
-													<td><strong>Pizza</strong></td>
-													<td class="text-center">1</td>
-													<td class="text-center">Rs. 500</td>
-													<td class="text-right">Rs.500</td>
-												</tr>
-												<tr>
-													<td>2</td>
-													<td><strong>Coke</strong></td>
-													<td class="text-center">1</td>
-													<td class="text-center">Rs.75</td>
-													<td class="text-right">Rs.75</td>
-												</tr>
+												{% for orders in order_food %}
+													<tr>
+														<td>{{ forloop.counter }}</td>
+														<td class="text-center"><strong>{{ orders.food.name }}</strong></td>
+														<td class="text-center">{{ orders.quantity }}</td>
+														<td class="text-right">Rs. {{ orders.food.price }}</td>
+														<td class="text-right">Rs. {{ orders.price }}</td>
+													</tr>
+												{% endfor %}
 												<tr class="line">
-													<!-- <td>3</td>
-													<td><strong>Testing</strong></td>
-													<td class="text-center">2</td>
-													<td class="text-center">$75</td>
-													<td class="text-right">$150.00</td> -->
+													
 												</tr>
 												<tr>
 													<td colspan="3"></td>
@@ -166,7 +157,7 @@ Order #1
 												<tr>
 													<td colspan="3">
 													</td><td class="text-right"><strong>Total</strong></td>
-													<td class="text-right"><strong>Rs.575</strong></td>
+													<td class="text-right"><strong>Rs.{{ order.total }}</strong></td>
 												</tr>
 											</tbody>
 										</table>

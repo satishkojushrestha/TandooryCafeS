@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
 from core.models import Charges, Food, Ingredient, Order, OrderFood, Supplier, User, Employee, Category
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.generic import UpdateView
 
 
@@ -394,11 +394,14 @@ def order_view(request):
     })
 
 def calculate_charges(total_amount):
+    print(f"Order_total: {total_amount}")
     charges = Charges.objects.get(id=1)
     vat = charges.vat
-    serv_charge = charges.service_charge
+    serv_charge = charges.service_charge    
     vat_amt =(total_amount*vat)/100
+    print(f"VAT: {vat_amt}")
     serv_amt =(total_amount*serv_charge)/100
+    print(f"SERV CAHRGE: {serv_amt}")
     net_price = total_amount + vat_amt + serv_amt
     return net_price
 
@@ -410,6 +413,7 @@ class AddOrder(View):
         order_id = request.GET.get('order_id', None)
         food = Food.objects.get(id=id)  
         if order_id:
+            print("Order Exist")
             order = Order.objects.get(id=order_id)
             food_order = OrderFood.objects.filter(order=order)
             food_order_found = 0
@@ -436,6 +440,7 @@ class AddOrder(View):
             order_food.save()
         
         total_price = calculate_charges(order.total)
+        print(f" Total price:  {total_price}")        
         charges = Charges.objects.get(id=1)        
         c_data = {
             'id':food.id,
@@ -454,6 +459,28 @@ class AddOrder(View):
         }
         return JsonResponse(order_data)
 
+@login_required(login_url="/")
+def order_detail_view(request, id):
+    order_obj = get_object_or_404(Order, id=id)
+    if order_obj.ordered:
+        order_foods = OrderFood.objects.filter(order=order_obj)
+        return render(request, 'pages/order_detail.html', {
+            'order': order_obj,
+            'order_food': order_foods,
+        })
+    else:
+        return HttpResponse(status=404)
 
-def order_detail_view(request):
-    return render(request, 'pages/add_order.html')
+
+@login_required(login_url="/")
+def save_order_detail(request):
+    if request.method == "POST":    
+        order = request.POST.get("order")
+        if order:
+            order_obj = Order.objects.get(id=request.POST.get('order_id'))
+            order_obj.ordered = True
+            order_obj.save()
+        return HttpResponseRedirect(reverse('order_view', args=(order_obj.id,)))
+
+    else:
+        return HttpResponse(status=404)

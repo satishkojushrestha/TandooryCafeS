@@ -26,7 +26,8 @@ urlpatterns = [
     path('food/edit/<int:id>', edit_food_view, name="edit_food"),
     path('order/', order_view, name='order'),
     path('ajax/crud/create/order/', AddOrder.as_view(), name='c_ajax_create_order'),
-    path('order/view/', order_detail_view, name="order_view"),
+    path('order/view/<int:id>', order_detail_view, name="order_view"),
+    path('order/add/', save_order_detail, name="add_order"),
     path('category/edit/<int:pk>/', CategoryUpdateView.as_view(), name="edit_category"),
     path('category/delete/<int:id>/', delete_category, name="delete_category"),
 ]

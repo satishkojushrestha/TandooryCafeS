@@ -129,3 +129,7 @@ dmypy.json
 .pyre/
 
 */migrations/0*
+
+
+#folders
+/media/*
