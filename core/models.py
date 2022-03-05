@@ -112,3 +112,13 @@ class OrderFood(models.Model):
 
     def __str__(self) -> str:
         return f" {self.order.id} -> {self.food.name}"
+
+
+class FoodIngredient(models.Model):
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+
+
+class FoodIngBridge(models.Model):
+    food_ing = models.ForeignKey(FoodIngredient, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()    
