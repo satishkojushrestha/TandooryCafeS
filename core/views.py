@@ -374,6 +374,19 @@ def edit_food_view(request, id):
     except:
         return HttpResponse(status=404)
 
+class CategoryUpdateView(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'pages/edit_category.html'
+
+    def get_success_url(self):
+        return reverse('add_category')
+    
+def delete_category(request, id):
+    category = Category.objects.get(id=id).delete()
+    return redirect('add_category')
+
+#orders
 @login_required(login_url="/")
 def order_view(request):
     return render(request,'pages/order.html', {
@@ -388,7 +401,6 @@ def calculate_charges(total_amount):
     serv_amt =(total_amount*serv_charge)/100
     net_price = total_amount + vat_amt + serv_amt
     return net_price
-
 
 
 class AddOrder(View):
@@ -443,14 +455,5 @@ class AddOrder(View):
         return JsonResponse(order_data)
 
 
-class CategoryUpdateView(UpdateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'pages/edit_category.html'
-
-    def get_success_url(self):
-        return reverse('add_category')
-    
-def delete_category(request, id):
-    category = Category.objects.get(id=id).delete()
-    return redirect('add_category')
+def order_detail_view(request):
+    return render(request, 'pages/add_order.html')

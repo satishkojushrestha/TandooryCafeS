@@ -1,0 +1,187 @@
+{% extends 'dashboard_base.html' %}
+
+{% block cssandscripts %}
+    <style>
+        .btn{
+            background-color: black;
+            color: white;
+        }
+
+
+        .invoice {
+            padding: 30px;
+        }
+
+        .invoice h2 {
+            margin-top: 0px;
+            line-height: 0.8em;
+        }
+
+        .invoice .small {
+            font-weight: 300;
+        }
+
+        .invoice hr {
+            margin-top: 10px;
+            border-color: #ddd;
+        }
+
+        .invoice .table tr.line {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .invoice .table td {
+            border: none;
+        }
+
+        .invoice .identity {
+            margin-top: 10px;
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+
+        .invoice .identity strong {
+            font-weight: 600;
+        }
+
+
+        .grid {
+            position: relative;
+            width: 100%;
+            background: #fff;
+            color: #666666;
+            border-radius: 2px;
+            margin-bottom: 25px;
+            box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media print{
+            #footer{
+                display:none;
+            }
+            .noPrint{
+                display:none;
+            }
+        }
+
+    </style>
+{% endblock %}
+
+{% block current_page %}
+Order #1
+{% endblock %}
+
+{% block page_content %}
+
+
+       <div class="row">
+        <div class="col-lg-12">
+
+            <!-- Dropdown Card Example -->
+            <div class="card shadow mb-12 border-left-warning">
+                <!-- Card Header - Dropdown -->
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold noPrint">Order Detail</h6>
+                    <div class="dropdown no-arrow">
+                        <button onclick="window.print()" class="btn noPrint">Print</button>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <!-- BEGIN INVOICE -->
+					<div class="col-xs-12">
+						<div class="grid invoice">
+							<div class="grid-body">
+								<div class="invoice-title">
+									<div class="row">
+										<div class="col-xs-12">
+											<img src="" alt="logo" height="35">
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-xs-12">
+											<h2>invoice<br>
+											<span class="small">order #1</span></h2>
+										</div>
+									</div>
+								</div>
+								<hr>
+								
+								<div class="row">
+									<div class="col-6">
+										<!-- <address>
+											<strong>Payment Method:</strong><br>
+											Cash<br>
+										</address> -->
+									</div>
+									<div class="col-6 text-right">
+										<address>
+											<strong>Order Date:</strong><br>
+											17/06/2021
+										</address>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<h3>ORDER SUMMARY</h3>
+										<table class="table table-striped">
+											<thead>
+												<tr class="line">
+													<td><strong>#</strong></td>
+													<td class="text-center"><strong>Foods</strong></td>
+													<td class="text-center"><strong>QTY</strong></td>
+													<td class="text-right"><strong>RATE</strong></td>
+													<td class="text-right"><strong>SUBTOTAL</strong></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td><strong>Pizza</strong></td>
+													<td class="text-center">1</td>
+													<td class="text-center">Rs. 500</td>
+													<td class="text-right">Rs.500</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td><strong>Coke</strong></td>
+													<td class="text-center">1</td>
+													<td class="text-center">Rs.75</td>
+													<td class="text-right">Rs.75</td>
+												</tr>
+												<tr class="line">
+													<!-- <td>3</td>
+													<td><strong>Testing</strong></td>
+													<td class="text-center">2</td>
+													<td class="text-center">$75</td>
+													<td class="text-right">$150.00</td> -->
+												</tr>
+												<tr>
+													<td colspan="3"></td>
+													<td class="text-right"><strong>Taxes</strong></td>
+													<td class="text-right"><strong>N/A</strong></td>
+												</tr>
+												<tr>
+													<td colspan="3">
+													</td><td class="text-right"><strong>Total</strong></td>
+													<td class="text-right"><strong>Rs.575</strong></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>									
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- END INVOICE -->
+                </div>
+            </div>
+
+        </div>
+       </div>
+
+
+{% endblock %}
