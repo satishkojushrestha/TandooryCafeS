@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Employee{% endblock %}
+{% block title %}Order{% endblock %}
 
 {% block cssandscripts %}
     <!-- Custom styles for this page -->
@@ -10,6 +10,7 @@
         :root{
             --delete_btn:#d74242;
             --edit_btn:#2fa751;
+            --eye_btn: gray;
         }
 
         .rm-background{
@@ -22,7 +23,7 @@
 
 <!-- {% block employee_show %}show{% endblock %} -->
 
-{% block current_page %} Employee {% endblock %}
+{% block current_page %} Order {% endblock %}
 
 {% block page_content %}
                 <!-- Begin Page Content -->
@@ -34,7 +35,7 @@
                         <div class="card-header py-3">
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
-                                    <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.2rem;">Employee</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.2rem;">Order</h6>
                                 </div>
                             </div>
                         </div>
@@ -43,35 +44,29 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Age</th>
-                                            <th>Start Date</th>
-                                            <th>Salary</th>
+                                            <th>Order ID</th>
+                                            <th>Ordered Date</th>
+                                            <th>Total</th>
                                             <th class="sorting_asc_disabled sorting_desc_disabled text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Age</th>
-                                            <th>Start Date</th>
-                                            <th>Salary</th>
+                                            <th>Order ID</th>
+                                            <th>Ordered Date</th>
+                                            <th>Total</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        {% for user in employees %}
-                                            <tr id="user-{{ user.id }}">
-                                                <td>{{ user.first_name }} {{ user.last_name }}</td>
-                                                <td>{{ user.position }}</td>
-                                                <td>{{ user.age }}</td>
-                                                <td>{{ user.start_date }}</td>
-                                                <td>{{ user.salary }}</td>
+                                        {% for order in order_obj %}
+                                            <tr id="order-{{ order.id }}">
+                                                <td>#{{ order.id }}</td>
+                                                <td>{{ order.time_stamp }}</td>
+                                                <td>{{ order.total }}</td>
                                                 <td class="text-right" style="padding: 10px;">
-                                                    <a href="{% url 'edit_employee' user.id %}"><i class="material-icons" style="color: var(--edit_btn);">edit</i></a>
-                                                    <button onclick="deleteUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);">delete</i></button>
+                                                    <a href="{% url 'order_view' order.id %}"><i class="material-icons" style="color: var(--eye_btn);">visibility</i></a>
+                                                    <!-- <button onclick="deleteUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);">delete</i></button> -->
                                                 </td>                                            
                                             </tr>
                                         {% endfor %}

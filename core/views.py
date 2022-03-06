@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Charges, Food, Ingredient, Order, OrderFood, Supplier, User, Employee, Category
+from core.models import Charges, Food, FoodIngBridge, Ingredient, Order, OrderFood, Supplier, User, Employee, Category
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -432,7 +432,8 @@ class AddOrder(View):
                 order_food.save()
                 order.total += food.price
                 order.save()
-        else:                  
+        else:        
+            print("Order Doesn't exist")          
             order = Order(order_description="Order in process.", total=0, ordered=False)
             order.total += food.price        
             order.save()                
@@ -463,7 +464,7 @@ class AddOrder(View):
 def order_detail_view(request, id):
     order_obj = get_object_or_404(Order, id=id)
     if order_obj.ordered:
-        order_foods = OrderFood.objects.filter(order=order_obj)
+        order_foods = OrderFood.objects.filter(order=order_obj)        
         return render(request, 'pages/order_detail.html', {
             'order': order_obj,
             'order_food': order_foods,
@@ -480,7 +481,21 @@ def save_order_detail(request):
             order_obj = Order.objects.get(id=request.POST.get('order_id'))
             order_obj.ordered = True
             order_obj.save()
+
+            order_foods = OrderFood.objects.filter(order=order_obj)        
+            #decreasing ingredient quantity according to order..
+            for food in order_foods:                
+                food_ingredient = FoodIngBridge.objects.filter(food_ing__food=food.food)
+                
+                print(food_ingredient)
+                
         return HttpResponseRedirect(reverse('order_view', args=(order_obj.id,)))
 
     else:
         return HttpResponse(status=404)
+
+@login_required(login_url="/")
+def order_table_view(request):
+    return render(request, "pages/order_table.html",{
+        'order_obj': Order.objects.filter(ordered=True),
+    })
