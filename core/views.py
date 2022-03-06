@@ -329,6 +329,21 @@ def add_category_view(request):
     return render(request, 'pages/add_category.html', {'form':CategoryForm, 'categories': Category.objects.all()})
 
 @login_required(login_url="/")
+def category_view(request):
+    return render(request, 'pages/category_detail.html',{
+        'categorys': Category.objects.all(),
+    })
+
+class DeleteCrudUserCategory(View):
+    def get(self, request):
+        id1 = request.GET.get('id', None)
+        Category.objects.get(id=id1).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@login_required(login_url="/")
 def food_view(request):
     return render(request, "pages/food_detail.html",{
         'foods':Food.objects.all(),

@@ -20,7 +20,10 @@ urlpatterns = [
     path('ajax/crud/delete/ingredient/', DeleteCrudIngredient.as_view(), name='crud_ajax_delete_ingredient'),
     path('ingredient/edit/<int:id>', edit_ingredient_view, name="edit_ingredient"),
     path('addfood/', add_food_view, name="add_food"),
+    path('category/', category_view, name="category_detail"),
     path('addcategory/', add_category_view, name="add_category"),
+    path('category/edit/<int:pk>/', CategoryUpdateView.as_view(), name="edit_category"),
+    path('ajax/crud/delete/category/', DeleteCrudUserCategory.as_view(), name='crud_ajax_delete_category'),
     path('food/',food_view, name="food"),
     path('ajax/crud/delete/food/', DeleteCrudFood.as_view(), name='crud_ajax_delete_food'),
     path('food/edit/<int:id>', edit_food_view, name="edit_food"),
@@ -29,6 +32,5 @@ urlpatterns = [
     path('order/view/<int:id>', order_detail_view, name="order_view"),
     path('order/all/', order_table_view, name="order_table"),
     path('order/add/', save_order_detail, name="add_order"),
-    path('category/edit/<int:pk>/', CategoryUpdateView.as_view(), name="edit_category"),
-    path('category/delete/<int:id>/', delete_category, name="delete_category"),
+    
 ]

@@ -55,8 +55,8 @@
                         {% render_field form.name class="form-control" %}
                     </div>
                     
-                    <button type="submit" class="btn btn-success">Update Category</button>
-                    <a href="{% url 'delete_category' object.id %}" class="btn btn-danger">Delete</a>
+                    <button type="submit" class="btn btn-primary">Update Category</button>
+                    <a href="{% url 'add_category' %}" style="margin-left: 20px;">Back</a>
                 </form>
             </div>
         </div>

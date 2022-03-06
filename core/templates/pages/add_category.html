@@ -99,9 +99,11 @@
                     <h6 class="m-0">Category's</h6>
                 </div>
                 <div class="card-body">
-                    {% for category in categories %}
+                    <h6><a href="{% url 'category_detail' %}">All Category</a></h6>
+
+                    <!-- {% for category in categories %}
                         <h6><a href="{% url 'edit_category' category.id %}">{{ category.name }}</a></h6>
-                    {% endfor %}
+                    {% endfor %} -->
                 </div>
             </div>
     
