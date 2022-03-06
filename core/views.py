@@ -395,7 +395,7 @@ class CategoryUpdateView(UpdateView):
     template_name = 'pages/edit_category.html'
 
     def get_success_url(self):
-        return reverse('add_category')
+        return reverse('category_detail')
     
 def delete_category(request, id):
     category = Category.objects.get(id=id).delete()
@@ -430,6 +430,7 @@ class AddOrder(View):
         if order_id:
             print("Order Exist")
             order = Order.objects.get(id=order_id)
+            print(order.id)
             food_order = OrderFood.objects.filter(order=order)
             food_order_found = 0
             for orders in food_order:
@@ -499,10 +500,22 @@ def save_order_detail(request):
 
             order_foods = OrderFood.objects.filter(order=order_obj)        
             #decreasing ingredient quantity according to order..
-            for food in order_foods:                
-                food_ingredient = FoodIngBridge.objects.filter(food_ing__food=food.food)
-                
-                print(food_ingredient)
+            for food in order_foods: 
+                order_food_quantity = food.quantity               
+                food_ingredient = FoodIngBridge.objects.filter(food_ing__food=food.food)                
+                # print(food_ingredient)
+                for ingredients in food_ingredient:
+                    food_ing_quantity = ingredients.quantity
+                    ing = Ingredient.objects.get(id=ingredients.ingredient.id)
+                    used_quantity = order_food_quantity * food_ing_quantity
+                    remaining_quantity = int(ing.quantity)
+
+                    if remaining_quantity < used_quantity:
+                        print("Out of stock")
+                    else:
+                        ing.quantity = remaining_quantity - used_quantity
+                        ing.save()  
+
                 
         return HttpResponseRedirect(reverse('order_view', args=(order_obj.id,)))
 
