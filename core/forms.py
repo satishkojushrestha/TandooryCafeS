@@ -1,7 +1,7 @@
 from dataclasses import field
 from pyexpat import model
 from django import forms
-from core.models import User, Ingredient, Food, Category
+from core.models import Charges, User, Ingredient, Food, Category
 
 
 class LoginForm(forms.Form):
@@ -84,3 +84,9 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
+
+
+class ChargesForm(forms.ModelForm):
+    class Meta:
+        model = Charges
+        fields = ['vat']

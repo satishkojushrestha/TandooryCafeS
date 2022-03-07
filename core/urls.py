@@ -27,10 +27,10 @@ urlpatterns = [
     path('food/',food_view, name="food"),
     path('ajax/crud/delete/food/', DeleteCrudFood.as_view(), name='crud_ajax_delete_food'),
     path('food/edit/<int:id>', edit_food_view, name="edit_food"),
+    path('charges/', charges_view, name="charges"),
     path('order/', order_view, name='order'),
     path('ajax/crud/create/order/', AddOrder.as_view(), name='c_ajax_create_order'),
     path('order/view/<int:id>', order_detail_view, name="order_view"),
     path('order/all/', order_table_view, name="order_table"),
-    path('order/add/', save_order_detail, name="add_order"),
-    
+    path('order/add/', save_order_detail, name="add_order"),    
 ]

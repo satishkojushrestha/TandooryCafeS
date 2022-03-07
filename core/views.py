@@ -1,6 +1,7 @@
+from telnetlib import STATUS
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from core.forms import EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
+from core.forms import ChargesForm, EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
 from core.models import Charges, Food, FoodIngBridge, Ingredient, Order, OrderFood, Supplier, User, Employee, Category
 from django.contrib.auth.decorators import login_required
@@ -401,6 +402,31 @@ def delete_category(request, id):
     category = Category.objects.get(id=id).delete()
     return redirect('add_category')
 
+def charges_view(request):
+    if request.method == "POST":
+        form = ChargesForm(request.POST)
+        if form.is_valid():    
+            vat = form.cleaned_data.get('vat')        
+            try:
+                charges = Charges.objects.get(id=1)
+                charges.vat=vat
+                charges.save()
+            except:
+                charges = Charges(vat=vat)
+                charges.save()
+            return redirect('charges')
+        else:
+            return render(request, 'pages/charges.html',{
+                'form': form,
+                'charge': Charges.objects.get(id=1)
+            })
+        
+
+    return render(request, 'pages/charges.html',{
+        'form': ChargesForm,
+        'charge': Charges.objects.get(id=1)
+    })
+
 #orders
 @login_required(login_url="/")
 def order_view(request):
@@ -410,14 +436,17 @@ def order_view(request):
 
 def calculate_charges(total_amount):
     print(f"Order_total: {total_amount}")
-    charges = Charges.objects.get(id=1)
-    vat = charges.vat
-    serv_charge = charges.service_charge    
+    try:
+        charges = Charges.objects.get(id=1)
+    except:
+        charges = Charges(
+            vat=15
+        )
+        charges.save()
+    vat = charges.vat  
     vat_amt =(total_amount*vat)/100
     print(f"VAT: {vat_amt}")
-    serv_amt =(total_amount*serv_charge)/100
-    print(f"SERV CAHRGE: {serv_amt}")
-    net_price = total_amount + vat_amt + serv_amt
+    net_price = total_amount + vat_amt
     return net_price
 
 
@@ -450,7 +479,7 @@ class AddOrder(View):
                 order.save()
         else:        
             print("Order Doesn't exist")          
-            order = Order(order_description="Order in process.", total=0, ordered=False)
+            order = Order(order_description="Order in process.", total=0, ordered=False, status=False)
             order.total += food.price        
             order.save()                
             order_food = OrderFood(order=order, food=food, quantity=1, price=food.price)
@@ -467,7 +496,6 @@ class AddOrder(View):
             'order_id': order.id,
             'order_total': order.total,
             'vat': charges.vat,
-            'serv_charge': charges.service_charge,
             'total_price': total_price
         }
 

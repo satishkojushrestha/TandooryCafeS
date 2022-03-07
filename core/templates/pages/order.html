@@ -158,7 +158,8 @@
         }
 
         t1{
-            float: right;
+            position: absolute;
+            right: 5px;
             margin-right: 5%;
             display: block;
         }
@@ -167,12 +168,34 @@
             margin-left: 10px;
         } */
 
+        .right{
+            position: absolute;
+            right: 20px;
+        }
+
+        #btn{
+            height: 17px;
+            width: 17px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .rm-bg{
+            background-color: transparent;
+            border: transparent;
+        }
+
+        .form-charges{
+            width: 100%;
+            height: 150px;
+        }
+
     </style>
 {% endblock %}
 
 {% block current_page %}Order{% endblock %}
 
 {% block page_content %}
+
     <div class="row box-row">
         <div class="col-md-6 box">
             <div class="container-fluid" style="width: 100%;">
@@ -249,13 +272,44 @@
                 {% endfor %}
                 </tbody>
               </table>
-              <form action="{% url 'add_order' %}" method="POST">
+              <form action="{% url 'add_order' %}" method="POST" class="form-charges">
                 {% csrf_token %}
                 <div class="second-box" id="second-box">
-                    
+                    <t1>Price: <span class="order-detail">${price}</span></t1><br>
+                    <t1>
+                        VAT: <span class="order-detail">${vat} </span> <input type="checkbox" name="vat" checked>
+                    </t1><br>
+                    <t1>
+                        Discount: <span class="order-detail discount">0% </span><button type="button" class="rm-bg" data-toggle="modal" data-target="#exampleModalLong"><i class="material-icons btn-circle btn-success" id="btn">add</i></button>
+                    </t1><br>
+                    <t1>Total Price: <span class="order-detail">${total_price}</span></t1><br>
+                    <input type="text" name="order_id" value="${id}" style="display:none;">  
+                    <input type="text" name="order" value="ordered" style="display:none;">                  
+                    <t1 style="margin-bottom: 20px;"><input type="submit" class="btn btn-primary" value="Save Order"></t1>
                 </div>
               </form>            
                     
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                ...
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -365,14 +419,17 @@
         appendTo = document.querySelector('.second-box')
         appendTo.innerHTML=""
         const content = `
-                <t1>Price: <span class="order-detail">${price}</span></t1><br>
-                <t1>VAT: <span class="order-detail">${vat}</span></t1><br>
-                <t1>Service Charge: <span class="order-detail">${service_charge}</span></t1><br>
-                <t1>Total Price: <span class="order-detail">${total_price}</span></t1><br>
-                <input type="text" name="order_id" value="${id}" style="display:none;">  
-                <input type="text" name="order" value="ordered" style="display:none;">                  
-                <t1 style="margin-bottom: 20px;"><input type="submit" class="btn btn-primary" value="Save Order"></t1>
-                 
+            <t1>Price: <span class="order-detail">${price}</span></t1><br>
+            <t1>
+                VAT: <span class="order-detail">${vat} </span> <input type="checkbox" name="vat" checked>
+            </t1><br>
+            <t1>
+                Discount: <span class="order-detail discount">0% </span><button type="button" class="rm-bg" data-toggle="modal" data-target="#exampleModalLong"><i class="material-icons btn-circle btn-success" id="btn">add</i></button>
+            </t1><br>
+            <t1>Total Price: <span class="order-detail">${total_price}</span></t1><br>
+            <input type="text" name="order_id" value="${id}" style="display:none;">  
+            <input type="text" name="order" value="ordered" style="display:none;">                  
+            <t1 style="margin-bottom: 20px;"><input type="submit" class="btn btn-primary" value="Save Order"></t1>               
         `
         appendTo.innerHTML = content
     }

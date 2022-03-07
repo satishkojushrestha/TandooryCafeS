@@ -1,7 +1,7 @@
 {% extends 'dashboard_base.html' %}
 
 {% block cssandscripts %}
-    <style>
+    <style !important>
         .btn{
             background-color: black;
             color: white;
@@ -59,9 +59,28 @@
             #footer{
                 display:none;
             }
+
             .noPrint{
                 display:none;
             }
+
+			.card{
+				background-color: transparent;
+				border: transparent;
+			}
+
+			.border-left-warning{
+				border-left: none;
+				border: none;
+			}
+
+			.grid{
+				box-shadow: none;
+			}
+
+			.shadow{
+				box-shadow: none;
+			}
         }
 
     </style>
