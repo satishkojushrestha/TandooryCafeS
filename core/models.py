@@ -96,9 +96,11 @@ class Charges(models.Model):
 class Order(models.Model):
     order_description = models.CharField(max_length=150)
     time_stamp = models.DateTimeField(auto_created=True, auto_now_add=True)
-    total = models.IntegerField(default=0)
+    sub_total = models.IntegerField(default=0)
+    grand_total = models.IntegerField(default=0)
     ordered = models.BooleanField(default=False)
     status = models.BooleanField(default=False)
+    payment = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id)

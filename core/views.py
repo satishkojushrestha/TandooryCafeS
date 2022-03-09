@@ -155,20 +155,35 @@ def supplier_view(request):
     })
 
 
+def get_total_stock_and_price():
+    total_price = 0 
+    ingredients = Ingredient.objects.all()  
+    total_stock = ingredients.count() 
+    for ingredient in ingredients:
+        price = ingredient.quantity * ingredient.price_per_unit
+        total_price+=price
+    return total_stock, total_price    
+       
+
 @login_required(login_url="/")
-def add_ingredient_view(request):  
+def add_ingredient_view(request):
+    total_stock, total_price = get_total_stock_and_price() 
     if request.method == "POST":
         form = IngredientForm(request.POST)
         if form.is_valid():
             form.save()
         else:
             return render(request, "pages/add_ingredient.html", {
-                "form":form
+                "form":form,
+                "total_stock":total_stock,
+                "total_price":total_price
             })
         return redirect("add_ingredient")
 
     return render(request, "pages/add_ingredient.html", {
-        "form":IngredientForm
+        "form":IngredientForm,
+        "total_stock":total_stock,
+        "total_price":total_price
     })
 
 @login_required(login_url="/")
@@ -300,9 +315,10 @@ def edit_ingredient_view(request, id):
 @login_required(login_url="/")
 def add_food_view(request):
     if request.method == 'POST':
-        form = FoodForm(request.POST)
+        form = FoodForm(request.POST, request.FILES)
         if form.is_valid():
             form_data = form.cleaned_data
+            image = request.FILES['image']
             name = form_data.get("name")
             category = form_data.get("category")
             price = form_data.get("price")
@@ -310,7 +326,8 @@ def add_food_view(request):
             new_food = Food(
                 name = name,
                 category = get_category,
-                price = price
+                price = price,
+                image=image
             )
             new_food.save()
             return redirect('add_food')
@@ -445,8 +462,8 @@ def calculate_charges(total_amount):
         charges.save()
     vat = charges.vat  
     vat_amt =(total_amount*vat)/100
-    print(f"VAT: {vat_amt}")
-    net_price = total_amount + vat_amt
+    # print(f"VAT: {vat_amt}")
+    net_price = total_amount + int(vat_amt)
     return net_price
 
 
@@ -468,24 +485,24 @@ class AddOrder(View):
                     orders.quantity += 1
                     orders.price = orders.food.price * orders.quantity
                     orders.save()
-                    order.total += food.price
+                    order.sub_total += food.price
                     order.save()
                     break
 
             if food_order_found == 0:
                 order_food = OrderFood(order=order, food=food, quantity=1, price=food.price)
                 order_food.save()
-                order.total += food.price
+                order.sub_total += food.price
                 order.save()
         else:        
             print("Order Doesn't exist")          
             order = Order(order_description="Order in process.", total=0, ordered=False, status=False)
-            order.total += food.price        
+            order.sub_total += food.price        
             order.save()                
             order_food = OrderFood(order=order, food=food, quantity=1, price=food.price)
             order_food.save()
         
-        total_price = calculate_charges(order.total)
+        total_price = calculate_charges(order.sub_total)
         print(f" Total price:  {total_price}")        
         charges = Charges.objects.get(id=1)        
         c_data = {
@@ -494,7 +511,7 @@ class AddOrder(View):
             'quantity': quantity,
             'price': food.price,
             'order_id': order.id,
-            'order_total': order.total,
+            'order_total': order.sub_total,
             'vat': charges.vat,
             'total_price': total_price
         }
@@ -555,3 +572,40 @@ def order_table_view(request):
     return render(request, "pages/order_table.html",{
         'order_obj': Order.objects.filter(ordered=True),
     })
+
+
+def calculatePrice(order_id, discount):
+    net_price = 0
+    discount = int(discount)
+    order = Order.objects.get(id=order_id)  
+    currprice = int(order.sub_total)
+    vat = Charges.objects.get(id=1).vat
+    vat_amt =(currprice*vat)/100
+    net_price = currprice + vat_amt
+    disc_amt = int((net_price*discount)/100)
+    net_price = net_price - disc_amt
+    return int(net_price)
+
+class UpdatePrice(View):
+    def get(self, request):
+        order_id = request.GET.get('order_id', None)
+        discount = request.GET.get('discount', None)
+
+        new_total = calculatePrice(order_id, discount)
+        c_data = {
+            'total':new_total,            
+        }
+
+        price_data = {
+            'price': c_data
+        }
+        return JsonResponse(price_data)
+
+def update_order(request,id):
+    if not id:
+        return HttpResponse(status=404)
+    context = {
+        'foods': OrderFood.objects.filter(order__id=id),
+        'order': Order.objects.get(id=id)
+    }
+    return render(request, 'pages/edit_order.html', context)

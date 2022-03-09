@@ -74,7 +74,7 @@
                     <h6 class="m-0">Add Food</h6>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                        
                         <div class="form-group">                            
@@ -94,6 +94,11 @@
                             {% render_field form.price class="form-control" %}
                         </div>
 
+                        <div class="form-group">
+                            {{ form.image.errors }}
+                            <label for="position">Image</label>
+                            {% render_field form.image class="form-control" %}
+                        </div>
                         
                         <button type="submit" class="btn btn-black">Add Food</button>
                         

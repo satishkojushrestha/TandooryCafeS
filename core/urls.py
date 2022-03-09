@@ -33,4 +33,6 @@ urlpatterns = [
     path('order/view/<int:id>', order_detail_view, name="order_view"),
     path('order/all/', order_table_view, name="order_table"),
     path('order/add/', save_order_detail, name="add_order"),    
+    path('ajax/crud/update/price/', UpdatePrice.as_view(), name='u_ajax_update_price'),
+    path('order/update/<int:id>', update_order, name="update_order")
 ]

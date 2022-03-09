@@ -46,6 +46,7 @@
                                         <tr>
                                             <th>Order ID</th>
                                             <th>Ordered Date</th>
+                                            <th>Payment</th>
                                             <th>Total</th>
                                             <th class="sorting_asc_disabled sorting_desc_disabled text-right">Actions</th>
                                         </tr>
@@ -54,6 +55,7 @@
                                         <tr>
                                             <th>Order ID</th>
                                             <th>Ordered Date</th>
+                                            <th>Payment</th>
                                             <th>Total</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
@@ -63,8 +65,24 @@
                                             <tr id="order-{{ order.id }}">
                                                 <td>#{{ order.id }}</td>
                                                 <td>{{ order.time_stamp }}</td>
-                                                <td>{{ order.total }}</td>
+                                                {% if order.payment %}
+                                                <td><span class="btn btn-success btn-icon-split">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-check"></i>
+                                                    </span>
+                                                    <span class="text">Success</span>
+                                                </span></td>
+                                                {% else %}
+                                                <td><span class="btn btn-info btn-icon-split">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </span>
+                                                    <span class="text">Pending</span>
+                                                </span></td>
+                                                {% endif %}
+                                                <td>{{ order.sub_total }}</td>
                                                 <td class="text-right" style="padding: 10px;">
+                                                    <a href="{% url 'update_order' order.id %}"><i class="material-icons" style="color: var(--eye_btn);">edit</i></a>
                                                     <a href="{% url 'order_view' order.id %}"><i class="material-icons" style="color: var(--eye_btn);">visibility</i></a>
                                                     <!-- <button onclick="deleteUser({{ user.id }})" class="rm-background"><i class="material-icons" style="color: var(--delete_btn);">delete</i></button> -->
                                                 </td>                                            
