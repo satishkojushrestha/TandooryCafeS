@@ -106,7 +106,7 @@
                     </tbody>
                   </table>
                   
-                  <form action="{% url 'add_order' %}" method="POST" class="form-charges">
+                  <form method="POST" class="form-charges">
                     {% csrf_token %}
                     <div class="second-box" id="second-box">
                         <t1>Price: Rs. <span class="order-detail">{{ order.sub_total }}</span></t1><br>
@@ -117,8 +117,13 @@
                             Discount: <span class="order-detail discount">0% </span><button type="button" class="rm-bg" data-toggle="modal" data-target="#exampleModalLong"><i class="material-icons btn-circle btn-success" id="btn">add</i></button>
                         </t1><br>
                         <t1>Total Price: Rs. <span class="order-detail form-price">{{ order.grand_total }}</span></t1><br>
-                        <t1>Payment: <input type="checkbox"></t1> <br>  
-                        <input type="text" name="order_id" value="${id}" style="display:none;">  
+                        {% if order.payment %}                        
+                        <t1>Payment: <input name="payment" type="checkbox" checked></t1> <br>  
+                        {% else %}
+                        <t1>Payment: <input name="payment" type="checkbox"></t1> <br>  
+                        {% endif %}
+                        <input type="text" name="order_id" value="{{ order.id }}" style="display:none;">  
+                        <input type="text" name="discount" class="form-discount" value="0" style="display:none;">  
                         <input type="text" name="order" value="ordered" style="display:none;">                  
                         <t1 style="margin-bottom: 20px;"><input type="submit" class="btn btn-primary" value="Update Order"></t1>
                     </div>
@@ -158,8 +163,10 @@
     <script>
 
         function updatePrice(price, discount){
+            console.log("update function called")
             document.querySelector('.discount').innerHTML= `${discount} %`
             document.querySelector('.form-price').innerHTML=price
+            document.querySelector('.form-discount').value=discount            
         }
 
         // for bootstrap modal
@@ -169,7 +176,7 @@
             $('#exampleModalLong').modal('hide');
             discount = document.querySelector('.discount-input').value;        
             document.querySelector('.discount-input').value = '';
-            // console.log(order_id)
+            // console.log({{ order.id }});
             // updatePrice(200,discount)
             $.ajax({
                 url: '{% url "u_ajax_update_price" %}',

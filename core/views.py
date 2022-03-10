@@ -496,7 +496,7 @@ class AddOrder(View):
                 order.save()
         else:        
             print("Order Doesn't exist")          
-            order = Order(order_description="Order in process.", total=0, ordered=False, status=False)
+            order = Order(order_description="Order in process.", sub_total=0, ordered=False, status=False)
             order.sub_total += food.price        
             order.save()                
             order_food = OrderFood(order=order, food=food, quantity=1, price=food.price)
@@ -602,6 +602,26 @@ class UpdatePrice(View):
         return JsonResponse(price_data)
 
 def update_order(request,id):
+    if request.method == "POST":
+        order_id = request.POST.get('order_id')
+        order_obj = Order.objects.get(id=order_id)
+        payment = request.POST.get('payment')
+        discount = request.POST.get('discount')
+        # print(type(discount))
+        # print(request.POST)
+        # print(payment)           
+        try:
+            discount = int(discount)
+            if discount > 0:
+                print("discounted")
+        except:
+            return reverse('update_order')     
+        if payment:
+            order_obj.payment = True
+        else:
+            order_obj.payment = False
+        order_obj.save()
+        return HttpResponseRedirect(reverse('order_view', args=(order_obj.id,)))
     if not id:
         return HttpResponse(status=404)
     context = {
@@ -609,3 +629,8 @@ def update_order(request,id):
         'order': Order.objects.get(id=id)
     }
     return render(request, 'pages/edit_order.html', context)
+
+
+#qr scanner
+def scanner_view(request):
+    return render(request, 'pages/qr_scan.html')

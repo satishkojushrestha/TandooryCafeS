@@ -34,5 +34,6 @@ urlpatterns = [
     path('order/all/', order_table_view, name="order_table"),
     path('order/add/', save_order_detail, name="add_order"),    
     path('ajax/crud/update/price/', UpdatePrice.as_view(), name='u_ajax_update_price'),
-    path('order/update/<int:id>', update_order, name="update_order")
+    path('order/update/<int:id>', update_order, name="update_order"),
+    path('qr/scan/', scanner_view, name='qr_scan'),
 ]

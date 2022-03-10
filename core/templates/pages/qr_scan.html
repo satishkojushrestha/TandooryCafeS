@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}QR Scanner{% endblock %}
+
+{% block cssandscripts %} 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+{% block current_page %}QR Scanner{% endblock %}
+
+{% block page_content %}
+    <div class="container-fluid" style="margin-top: 35px; margin-left: 80px; width: 90%;">
+        <div class="row">
+            <div class="col-md-6">
+                <video id="preview" width="100%"></video>
+            </div>
+            <div class="col-md-6">
+                <label for="qr">Scan Qr Code</label>
+                <input type="text" name="text" id="text" readonly="" placeholder="scan qrcode" class="form-control">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        let scanner = new Instascan.Scanner({video:document.getElementById('preview')});
+        Instascan.Camera.getCameras().then(function(cameras){
+            if(cameras.length > 0){
+                scanner.start(cameras[0]);
+            } else{
+                alert('No cameras found');
+            }
+        }).catch(function(e) {
+            console.error(e)
+        })
+
+        scanner.addListener('scan', function(c){
+            window.location.href = c;
+        })
+
+    </script>
+{% endblock %}
