@@ -37,4 +37,5 @@ urlpatterns = [
     path('order/update/<int:id>', update_order, name="update_order"),
     path('qr/scan/', scanner_view, name='qr_scan'),
     path('stock/decrease/<int:id>/', decrease_stock, name='decrease_stock'),
+    path('qrhistory/', qr_history_view, name="qr_history_view"),
 ]

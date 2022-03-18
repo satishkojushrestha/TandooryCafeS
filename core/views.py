@@ -697,3 +697,8 @@ def decrease_stock(request, id):
     return render(request, 'pages/decrease_stock.html',{
         'ingredient': ing 
     })
+
+def qr_history_view(request):
+    return render(request,"pages/qr_history_detail.html",{
+        'qrhistories': QRHistory.objects.all(),
+    })
