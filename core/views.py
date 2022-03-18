@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from core.forms import ChargesForm, EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Charges, Food, FoodIngBridge, Ingredient, Order, OrderFood, Supplier, User, Employee, Category
+from core.models import Charges, Food, FoodIngBridge, Ingredient, Order, OrderFood, Supplier, User, Employee, Category, QRHistory
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -672,13 +672,24 @@ def decrease_stock(request, id):
         quantity = request.POST.get('quantity')
         try:
             quantity = int(quantity)
-            curr_quantity = int(ing.quantity )
-            ing.quantity = curr_quantity-quantity
-            ing.save()
+            curr_quantity = int(ing.quantity)
+            if curr_quantity < quantity:
+                return render(request, 'pages/decrease_stock.html',{
+                    'ingredient': ing,
+                    'message': 'Stock is less than entered number.' 
+                })  
+            else:            
+                ing.quantity = curr_quantity-quantity
+                ing.save()
+                newQRHist = QRHistory(
+                    ing_name = ing.name,
+                    quantity = quantity
+                )
+                newQRHist.save()
         except:
             return render(request, 'pages/decrease_stock.html',{
                 'ingredient': ing,
-                'message': 'Stock is less than entered number.' 
+                'message': 'Please enter a number.' 
             })
 
         return redirect('ingredient')

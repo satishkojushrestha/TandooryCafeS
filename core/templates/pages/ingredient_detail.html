@@ -16,6 +16,8 @@
             background-color: transparent; 
             border:none;
         }
+
+
     </style>
 
 {% endblock %}
@@ -33,8 +35,11 @@
                         
                         <div class="card-header py-3">
                             <div class="row">
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-6">
                                     <h6 class="m-0 font-weight-bold text-primary" style="font-size: 1.2rem;">Ingredient</h6>
+                                </div>
+                                <div class="col-6">
+                                    <a href="{% url 'add_category' %}" class="noPrint" style="margin: 0; padding:0; float: right;">Qr History</a>
                                 </div>
                             </div>
                         </div>

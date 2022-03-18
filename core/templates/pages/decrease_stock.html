@@ -52,8 +52,10 @@
                         <label for="quantitys">Quantity</label>
                         <input name="quantity" type="number" class="form-control" placeholder="Enter quantity you want to decrease! " min="0">
                     </div>        
-                    
-                    <button type="submit" class="btn btn-black">Decrease Stock</button>
+                    {% if message %}
+                    <span class="text-danger">*{{message}}</span><br>
+                    {% endif %}
+                    <button type="submit" class="btn btn-black" style="margin-top: 10px;">Decrease Stock</button>
                 </form>
             </div>
         </div>
