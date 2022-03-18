@@ -111,10 +111,10 @@
                     <div class="second-box" id="second-box">
                         <t1>Price: Rs. <span class="order-detail">{{ order.sub_total }}</span></t1><br>
                         <t1>
-                            VAT: <span class="order-detail">15%</span>
+                            VAT: <span class="order-detail">{{order.vat}}%</span>
                         </t1><br>
                         <t1>
-                            Discount: <span class="order-detail discount">0% </span><button type="button" class="rm-bg" data-toggle="modal" data-target="#exampleModalLong"><i class="material-icons btn-circle btn-success" id="btn">add</i></button>
+                            Discount: <span class="order-detail discount">{% if order.discount %}{{ order.discount }}%{% else %}0% {% endif %} </span><button type="button" class="rm-bg" data-toggle="modal" data-target="#exampleModalLong"><i class="material-icons btn-circle btn-success" id="btn">add</i></button>
                         </t1><br>
                         <t1>Total Price: Rs. <span class="order-detail form-price">{{ order.grand_total }}</span></t1><br>
                         {% if order.payment %}                        

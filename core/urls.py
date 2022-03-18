@@ -36,4 +36,5 @@ urlpatterns = [
     path('ajax/crud/update/price/', UpdatePrice.as_view(), name='u_ajax_update_price'),
     path('order/update/<int:id>', update_order, name="update_order"),
     path('qr/scan/', scanner_view, name='qr_scan'),
+    path('stock/decrease/<int:id>/', decrease_stock, name='decrease_stock'),
 ]

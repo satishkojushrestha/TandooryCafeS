@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Stock{% endblock %}
+
+{% block cssandscripts %}   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #content{
+            background-color: #f4f5f9;
+        }
+
+        .form-control{
+            height: 50px;
+        }
+
+        .form-wrapper{
+            width: 80%;
+            margin-left: 5%;
+            margin-top: 5%;
+        }
+
+        .btn-black{
+            background-color: #456AD8;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+<!-- {% block employee_show %}show{% endblock %} -->
+
+
+{% block current_page %}Decrease Stock{% endblock %}
+
+{% block page_content %}
+
+    <div class="form-wrapper">
+
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0">Decrease Stock for {{ ingredient.name }}</h6>
+                <div class="dropdown no-arrow">
+                    Total Stock : {{ ingredient.quantity }}
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="quantitys">Quantity</label>
+                        <input name="quantity" type="number" class="form-control" placeholder="Enter quantity you want to decrease! " min="0">
+                    </div>        
+                    
+                    <button type="submit" class="btn btn-black">Decrease Stock</button>
+                </form>
+            </div>
+        </div>
+       
+    </div>
+
+
+
+{% endblock %}

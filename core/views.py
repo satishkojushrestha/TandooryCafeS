@@ -457,7 +457,7 @@ def calculate_charges(total_amount):
         charges = Charges.objects.get(id=1)
     except:
         charges = Charges(
-            vat=15
+            vat=13
         )
         charges.save()
     vat = charges.vat  
@@ -496,13 +496,16 @@ class AddOrder(View):
                 order.save()
         else:        
             print("Order Doesn't exist")          
-            order = Order(order_description="Order in process.", sub_total=0, ordered=False, status=False)
+            vat = Charges.objects.get(id=1).vat
+            order = Order(order_description="Order in process.", sub_total=0, ordered=False, status=False, vat=vat)
             order.sub_total += food.price        
             order.save()                
             order_food = OrderFood(order=order, food=food, quantity=1, price=food.price)
             order_food.save()
         
         total_price = calculate_charges(order.sub_total)
+        # order_ = Order.objects.get(id=order_id)
+        # order_.grand_total = total_price        
         print(f" Total price:  {total_price}")        
         charges = Charges.objects.get(id=1)        
         c_data = {
@@ -533,6 +536,24 @@ def order_detail_view(request, id):
     else:
         return HttpResponse(status=404)
 
+def calculate_grand_total(id):
+    order_obj = Order.objects.get(id=id)
+    net_price = 0
+    discount = int(order_obj.discount)
+    vat = int(order_obj.vat)                          
+    currprice = int(order_obj.sub_total)
+
+    #calculating discounted amount
+    disc_amt = round((currprice*discount)/100)
+    net_price = currprice - int(disc_amt)
+
+    #calculating vat amount
+    vat = Charges.objects.get(id=1).vat
+    vat_amt =round((net_price*vat)/100)
+    net_price = net_price + int(vat_amt)
+
+    order_obj.grand_total=net_price
+    order_obj.save()
 
 @login_required(login_url="/")
 def save_order_detail(request):
@@ -540,8 +561,9 @@ def save_order_detail(request):
         order = request.POST.get("order")
         if order:
             order_obj = Order.objects.get(id=request.POST.get('order_id'))
-            order_obj.ordered = True
+            order_obj.ordered = True     
             order_obj.save()
+            calculate_grand_total(request.POST.get('order_id'))
 
             order_foods = OrderFood.objects.filter(order=order_obj)        
             #decreasing ingredient quantity according to order..
@@ -579,17 +601,23 @@ def calculatePrice(order_id, discount):
     discount = int(discount)
     order = Order.objects.get(id=order_id)  
     currprice = int(order.sub_total)
+    disc_amt = round((currprice*discount)/100)
+    net_price = currprice - int(disc_amt)
+
     vat = Charges.objects.get(id=1).vat
-    vat_amt =(currprice*vat)/100
-    net_price = currprice + vat_amt
-    disc_amt = int((net_price*discount)/100)
-    net_price = net_price - disc_amt
+    vat_amt =round((net_price*vat)/100)
+    net_price = net_price + int(vat_amt)
+    
     return int(net_price)
 
 class UpdatePrice(View):
     def get(self, request):
         order_id = request.GET.get('order_id', None)
         discount = request.GET.get('discount', None)
+        order = Order.objects.get(id=order_id)
+        order.discount = int(discount)        
+        order.vat = Charges.objects.get(id=1).vat
+        order.save()
 
         new_total = calculatePrice(order_id, discount)
         c_data = {
@@ -613,6 +641,7 @@ def update_order(request,id):
         try:
             discount = int(discount)
             if discount > 0:
+                order_obj.discount = discount
                 print("discounted")
         except:
             return reverse('update_order')     
@@ -621,6 +650,7 @@ def update_order(request,id):
         else:
             order_obj.payment = False
         order_obj.save()
+        calculate_grand_total(order_id)
         return HttpResponseRedirect(reverse('order_view', args=(order_obj.id,)))
     if not id:
         return HttpResponse(status=404)
@@ -634,3 +664,25 @@ def update_order(request,id):
 #qr scanner
 def scanner_view(request):
     return render(request, 'pages/qr_scan.html')
+
+def decrease_stock(request, id):
+    ing = Ingredient.objects.get(id=id)
+
+    if request.method == "POST":
+        quantity = request.POST.get('quantity')
+        try:
+            quantity = int(quantity)
+            curr_quantity = int(ing.quantity )
+            ing.quantity = curr_quantity-quantity
+            ing.save()
+        except:
+            return render(request, 'pages/decrease_stock.html',{
+                'ingredient': ing,
+                'message': 'Stock is less than entered number.' 
+            })
+
+        return redirect('ingredient')
+
+    return render(request, 'pages/decrease_stock.html',{
+        'ingredient': ing 
+    })

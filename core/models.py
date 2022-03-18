@@ -9,7 +9,6 @@ from django.core.files import File
 from PIL import Image, ImageDraw
 from django.conf import settings
 
-
 class User(AbstractUser):
     contact_number = models.CharField(max_length=10, null=True, blank=True)
     address = models.CharField(max_length=50, null=True, blank=True)
@@ -36,7 +35,6 @@ class Supplier(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-
 class Ingredient(models.Model):
     name = models.CharField(max_length=20, unique=True)
     unit = models.CharField(max_length=20)
@@ -58,7 +56,8 @@ class Ingredient(models.Model):
             last_pk = Ingredient.objects.last()
             get_pk = str(last_pk.pk+1)
             # print(get_pk)
-        qr_url = f'{self.name}/{get_pk}'
+                      
+        qr_url = f'http://127.0.0.1:8000/stock/decrease/{get_pk}'
         qrcode_img = qrcode.make(qr_url)
         qr_size = qrcode_img.pixel_size
         canvas = Image.new('RGB', (qr_size+8, qr_size+5), 'white')
@@ -101,6 +100,8 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
     status = models.BooleanField(default=False)
     payment = models.BooleanField(default=False)
+    discount = models.IntegerField(default=0)
+    vat = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.id)
@@ -130,3 +131,9 @@ class FoodIngBridge(models.Model):
 
     def __str__(self):
         return f"{self.food_ing} - {self.ingredient}" 
+
+
+class QRHistory(models.Model):
+    ing_name = models.CharField(max_length=50)
+    quantity = models.IntegerField()
+    scanned_date = models.DateTimeField(auto_now_add=True)

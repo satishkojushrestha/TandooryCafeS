@@ -70,7 +70,7 @@
 			}
 
 			.border-left-warning{
-				border-left: none;
+				border-left: none !important;
 				border: none;
 			}
 
@@ -79,7 +79,7 @@
 			}
 
 			.shadow{
-				box-shadow: none;
+				box-shadow: none !important;
 			}
         }
 
@@ -170,13 +170,23 @@ Order #{{ order.id }}
 												</tr>
 												<tr>
 													<td colspan="3"></td>
-													<td class="text-right"><strong>Taxes</strong></td>
-													<td class="text-right"><strong>N/A</strong></td>
+													<td class="text-right"><strong>Sub Total</strong></td>
+													<td class="text-right"><strong>Rs.{{ order.sub_total }}</strong></td>
+												</tr>
+												<tr>
+													<td colspan="3"></td>
+													<td class="text-right"><strong>Discount</strong></td>
+													<td class="text-right"><strong>{{ order.discount }}%</strong></td>
+												</tr>
+												<tr>
+													<td colspan="3"></td>
+													<td class="text-right"><strong>VAT</strong></td>
+													<td class="text-right"><strong>{{ order.vat }}%</strong></td>
 												</tr>
 												<tr>
 													<td colspan="3">
 													</td><td class="text-right"><strong>Total</strong></td>
-													<td class="text-right"><strong>Rs.{{ order.sub_total }}</strong></td>
+													<td class="text-right"><strong>Rs.{{ order.grand_total }}</strong></td>
 												</tr>
 											</tbody>
 										</table>
@@ -195,3 +205,4 @@ Order #{{ order.id }}
 
 
 {% endblock %}
+
