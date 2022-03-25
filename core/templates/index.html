@@ -63,34 +63,58 @@
         .card-body-hover:hover, .card-hover:hover{
             transform: scale(1.05);
         }
+       
 
 
-        .row{ 
-            margin: 0;
-            padding: 0;
-            width: 100%;          
-        }
-
-        .wrapper-top-list{
+        .custom-card{
+            padding: 15px;
             width: 80%;
-            margin-left: 10%;
+            margin-left: 2%;
         }
 
-        .card-cust{
-            box-shadow: 2px 3px 8px rgba(28 73 200 / 40%);
-            border: 1px #1c49c8 solid;
-            background-color: #1c49c8;
-            color: white;
-            padding: 5px;
-            border-radius: 10px;
-            margin-bottom: 5px;
+        .foods{
+            margin-top: 4%;
+            width: 85%;
+            margin-left: 6%;            
         }
 
-        .table .thead-dark th{
-            background-color: black !important;
+        .discription li{
+            list-style: none;
+        }
+        
+        .food-name{
+            font-weight: 600;
+            margin-top: 4px;
         }
 
+        .food-cat{
+            font-size: .8rem;            
+        }
 
+        .price{
+            margin-top: 10px;
+        }
+
+        .food-img{
+            border-radius: 100%;
+            height:60px;
+            width:70px;
+        }
+
+        .border-right-warning{
+            border-bottom: .25rem solid #f6c23e!important;
+        }
+
+        .foods{
+            border-top: .1rem solid lightgray!important;
+            padding: 10px;
+        }
+
+        .top-list-title{
+            margin:10px;
+        }
+
+        
 
     </style>
     {% block cssandscripts %} {% endblock %}
@@ -464,13 +488,13 @@
                         </div>
 
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2 card-hover">
-                                <div class="card-body card-body-hover">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rs. {{ total_earnings }}</div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Total Earning</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_earnings }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -479,6 +503,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        
 
                         <!-- Pending Requests Card Example -->
                         <!-- <div class="col-xl-3 col-md-6 mb-4">
@@ -502,7 +528,6 @@
                     <div class="row">
 
                         <div class="col-xl-8 col-lg-7">
-                            <h5>Yearly Earning Chart</h5>
                             <!-- Area Chart -->
                             <div class="card shadow mb-6">
                                 <div class="card-header py-3">
@@ -524,33 +549,51 @@
                         </div>
 
                         <div class="col-xl-4 col-lg-5">
-                            <h5>Top Selling Foods</h5>
-                            <div class="card" style="border-radius: 10px;">
-                                <table class="table" style="border-radius: 10px;">
-                                    <tr class="thead-dark">
-                                        <th>#</th>
-                                        <th>Name</th>                                     
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Coke</td>
-                                    </tr>
+                            <div class="card custom-card border-right-warning" style="border-radius: 10px;">                               
 
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Fanta</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            
+                                <h4 class="top-list-title">Top Selling Food</h4>
+
+                                <div class="foods row">                                    
+                                    <div class="col-4">
+                                        <img src="/media/foods/burger.jpg" alt="Food" class="food-img">
+                                    </div>  
+                                    <div class="discription col-4 text-center">
+                                        <li class="food-name">Burger</li>
+                                        <li class="food-cat">Fast Food</li> 
+                                    </div>                                    
+                                    <span class="price col-4 text-right">Rs.200</span>
+                                </div>
+
+                                <div class="foods row">
+                                    <div class="col-4">
+                                        <img src="/media/foods/download.jpg" alt="Food" class="food-img">
+                                    </div>                                    
+                                    
+                                    <div class="discription col-4 text-center">
+                                        <li class="food-name">Coke</li>
+                                        <li class="food-cat">Beverage</li> 
+                                    </div>                                    
+                                    <span class="price col-4 text-right">Rs.200</span>
+                                </div>
+
+                                <div class="foods row">
+                                    <div class="col-4">
+                                        <img src="/media/foods/braed_oIMWwIT.jpg" alt="Food" class="food-img">
+                                    </div>                                    
+                                    
+                                    <div class="discription col-4 text-center">
+                                        <li class="food-name">Bread</li>
+                                        <li class="food-cat">Bread</li> 
+                                    </div>                                    
+                                    <span class="price col-4 text-right">Rs.200</span>
+                                </div>
+
+                            </div>                            
                                             
-                        </div>
-                        
+                        </div>                        
 
                     </div>
-
-                    
-
+                
                 </div>
                 <!-- /.container-fluid -->
 
