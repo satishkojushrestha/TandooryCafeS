@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FoodIngBridge, FoodIngredient, User, Employee, Supplier, Ingredient, Food, Category, Order, OrderFood, Charges
+from .models import FoodIngBridge, FoodIngredient, User, Employee, Supplier, Ingredient, Food, Category, Order, OrderFood, Charges, QRHistory
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -14,3 +14,4 @@ admin.site.register(OrderFood)
 admin.site.register(Charges)
 admin.site.register(FoodIngBridge)
 admin.site.register(FoodIngredient)
+admin.site.register(QRHistory)

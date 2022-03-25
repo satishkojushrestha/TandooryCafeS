@@ -1,5 +1,3 @@
-from email.policy import default
-from statistics import mode
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 #for generating qr code
@@ -36,7 +34,7 @@ class Supplier(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=20)
     unit = models.CharField(max_length=20)
     price_per_unit = models.PositiveIntegerField()
     supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT)    
@@ -82,7 +80,7 @@ class Food(models.Model):
     name = models.CharField(max_length=20)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.PositiveIntegerField()
-    image = models.ImageField(upload_to='foods', default="foods/default3.svg")
+    image = models.ImageField(upload_to='foods', default="foods/default3.svg", null=False, blank=False)
 
     def __str__(self) -> str:
         return str(self.name)

@@ -76,7 +76,9 @@
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                       
+                        {% if message %}
+                        <h6 class="text-danger" style="font-weight: 400;">* {{ message }}</h6>
+                        {% endif %}
                         <div class="form-group">                            
                             <label for="firstname">Name</label>
                             {% render_field form.name class="form-control" %}
@@ -98,6 +100,9 @@
                             {{ form.image.errors }}
                             <label for="position">Image</label>
                             {% render_field form.image class="form-control" %}
+                            {% if img_message %}
+                            <h6 class="text-danger" style="font-weight: 400;">* {{ img_message }}.</h6>
+                            {% endif %}
                         </div>
                         
                         <button type="submit" class="btn btn-black">Add Food</button>
@@ -113,7 +118,7 @@
             <!-- Basic Card Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0">Options</h6>
+                    <h6 class="m-0">Quick Links</h6>
                 </div>
                 <div class="card-body">
                 

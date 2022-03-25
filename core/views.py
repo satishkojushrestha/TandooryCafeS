@@ -10,9 +10,20 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.generic import UpdateView
 
 
+def monthly_report():
+    pass
+
+
 @login_required(login_url="/")
 def dashboard_view(request):
-    return render(request, "index.html")
+    total_stock, expense = get_total_stock_and_price()
+    total_orders = Order.objects.filter(ordered=True).count()
+    context = {
+        'total_stock': total_stock,
+        'expense': expense,
+        'total_orders': total_orders,
+    }
+    return render(request, "index.html", context)
 
 def logoutView(request):
     logout(request)
@@ -167,11 +178,27 @@ def get_total_stock_and_price():
 
 @login_required(login_url="/")
 def add_ingredient_view(request):
+    ing_found = False
     total_stock, total_price = get_total_stock_and_price() 
     if request.method == "POST":
         form = IngredientForm(request.POST)
+        ing_obj = Ingredient.objects.all()
+                    
         if form.is_valid():
-            form.save()
+            quantity = form.cleaned_data.get('quantity')
+            ingredient_name = request.POST.get('name')
+            price_per_unit = form.cleaned_data.get('price_per_unit')
+            for ing in ing_obj:
+                if ingredient_name == ing.name:
+                    currquantity = int(ing.quantity)
+                    new_quantity = currquantity + int(quantity)
+                    ing.quantity = new_quantity
+                    ing.price_per_unit = price_per_unit
+                    ing_found = True
+                    ing.save()
+                    break
+            if not ing_found:
+                form.save()
         else:
             return render(request, "pages/add_ingredient.html", {
                 "form":form,
@@ -314,12 +341,25 @@ def edit_ingredient_view(request, id):
 
 @login_required(login_url="/")
 def add_food_view(request):
+    foods = Food.objects.all()
     if request.method == 'POST':
         form = FoodForm(request.POST, request.FILES)
         if form.is_valid():
             form_data = form.cleaned_data
-            image = request.FILES['image']
+            try:
+                image = request.FILES['image']
+            except:
+                return render(request, 'pages/add_food.html', {
+                        'form':form,
+                        'img_message': 'You should upload an image.'
+                    })
             name = form_data.get("name")
+            for food in foods:
+                if name == food.name:
+                    return render(request, 'pages/add_food.html', {
+                        'form':form,
+                        'message': 'Food Already Added!'
+                    })
             category = form_data.get("category")
             price = form_data.get("price")
             get_category = Category.objects.get(name=category)
@@ -565,24 +605,6 @@ def save_order_detail(request):
             order_obj.save()
             calculate_grand_total(request.POST.get('order_id'))
 
-            order_foods = OrderFood.objects.filter(order=order_obj)        
-            #decreasing ingredient quantity according to order..
-            for food in order_foods: 
-                order_food_quantity = food.quantity               
-                food_ingredient = FoodIngBridge.objects.filter(food_ing__food=food.food)                
-                # print(food_ingredient)
-                for ingredients in food_ingredient:
-                    food_ing_quantity = ingredients.quantity
-                    ing = Ingredient.objects.get(id=ingredients.ingredient.id)
-                    used_quantity = order_food_quantity * food_ing_quantity
-                    remaining_quantity = int(ing.quantity)
-
-                    if remaining_quantity < used_quantity:
-                        print("Out of stock")
-                    else:
-                        ing.quantity = remaining_quantity - used_quantity
-                        ing.save()  
-
                 
         return HttpResponseRedirect(reverse('order_view', args=(order_obj.id,)))
 
@@ -647,10 +669,27 @@ def update_order(request,id):
             return reverse('update_order')     
         if payment:
             order_obj.payment = True
+            order_foods = OrderFood.objects.filter(order=order_obj)        
+            #decreasing ingredient quantity according to order..
+            for food in order_foods: 
+                order_food_quantity = food.quantity               
+                food_ingredient = FoodIngBridge.objects.filter(food_ing__food=food.food)                
+                # print(food_ingredient)
+                for ingredients in food_ingredient:
+                    food_ing_quantity = ingredients.quantity
+                    ing = Ingredient.objects.get(id=ingredients.ingredient.id)
+                    used_quantity = order_food_quantity * food_ing_quantity
+                    remaining_quantity = int(ing.quantity)
+
+                    if remaining_quantity < used_quantity:
+                        print("Out of stock")
+                    else:
+                        ing.quantity = remaining_quantity - used_quantity
+                        ing.save() 
         else:
             order_obj.payment = False
         order_obj.save()
-        calculate_grand_total(order_id)
+                 
         return HttpResponseRedirect(reverse('order_view', args=(order_obj.id,)))
     if not id:
         return HttpResponse(status=404)

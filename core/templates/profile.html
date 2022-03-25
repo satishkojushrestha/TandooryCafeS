@@ -29,6 +29,7 @@
             background-clip: border-box;
             border: 0 solid rgba(0,0,0,.125);
             border-radius: 1rem;
+            box-shadow: 10px 10px 10px rgba(128, 128, 128, 0.4);
         }
         
         .card-body {
@@ -73,6 +74,16 @@
             margin-bottom: 12px;
         }
 
+        .btn{
+          box-shadow: 10px 10px 10px rgba(128, 128, 128, 0.4);
+          transition: top 0.2s linear, box-shadow 0.1s linear;
+        }
+
+        .btn:active{
+          position: relative;
+          box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.6);
+          top: 6px;
+        }
         
         </style>
     {% endblock %}

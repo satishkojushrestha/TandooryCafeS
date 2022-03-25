@@ -55,6 +55,15 @@
             background-color: black;
         }
 
+        .row .card-body, .card {
+            transition-property: transform;
+            transition-duration: 0.3s;
+        }
+
+        .card-body:hover, .card:hover{
+            transform: scale(1.05);
+        }
+
 
     </style>
     {% block cssandscripts %} {% endblock %}
@@ -237,6 +246,18 @@
                     <span>Manage Charges</span>
                 </a>
 
+                <a class="nav-link" href="{% url 'add_category' %}"
+                    aria-expanded="true" aria-controls="collapse">
+                    <i class="material-icons">category</i>
+                    <span>Add Category</span>
+                </a>
+
+                 <a class="nav-link" href="{% url 'qr_history_view' %}"
+                    aria-expanded="true" aria-controls="collapse">
+                    <i class="material-icons">qr_code_scanner</i>
+                    <span>QR History</span>
+                </a>
+
             </li>
 
             <!-- Divider -->
@@ -334,8 +355,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                Total Orders</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_orders }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -352,8 +373,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Earnings (Annual)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                                Total Payment</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rs. {{ expense }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -364,7 +385,7 @@
                         </div>
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -390,10 +411,33 @@
                                     </div>
                                 </div>
                             </div>
+                        </div> -->
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Stock
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ total_stock }}</div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
@@ -408,7 +452,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
