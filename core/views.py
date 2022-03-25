@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from core.forms import ChargesForm, EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Charges, Food, FoodIngBridge, Ingredient, Order, OrderFood, Supplier, User, Employee, Category, QRHistory, YearlyReport
+from core.models import Charges, Food, FoodIngBridge, FoodOrderCount, Ingredient, Order, OrderFood, Supplier, User, Employee, Category, QRHistory, YearlyReport
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -121,6 +121,16 @@ def dashboard_view(request):
     current_date = str(datetime.now().date())
     full_date = datetime.strptime(current_date, "%Y-%m-%d")
     current_year = full_date.year #from here we gotcurrent year
+    counter = 0
+    food_list = FoodOrderCount.objects.all().order_by('-count')
+    new_list = []
+    for foods in food_list:
+        new_list.append(foods)
+        counter+=1
+        if counter == 4:
+            break
+    print(new_list)
+
     try:
         yearly_report_ = YearlyReport.objects.get(year=current_year)
         total_stock, total_order, total_payments, total_earnings = monthly_report()
@@ -129,7 +139,8 @@ def dashboard_view(request):
             'total_order': total_order,
             'total_payments': total_payments,
             'total_earnings': total_earnings, 
-            'yearly_report': yearly_report_       
+            'yearly_report': yearly_report_,
+            'top_foods': new_list,       
         }
         return render(request, "index.html", context)
     except:
@@ -138,7 +149,8 @@ def dashboard_view(request):
             'total_stock': total_stock,
             'total_order': total_order,
             'total_payments': total_payments,
-            'total_earnings': total_earnings,        
+            'total_earnings': total_earnings,  
+            'top_foods': new_list,      
         }
         return render(request, "index.html", context)
 
@@ -633,6 +645,15 @@ class AddOrder(View):
         quantity = request.GET.get('quantity', None)
         order_id = request.GET.get('order_id', None)
         food = Food.objects.get(id=id)  
+        try:
+            get_food_count = FoodOrderCount.objects.get(food=food)
+            get_food_count.count = get_food_count.count+1
+            get_food_count.save()
+        except:
+            new_food_order_counter = FoodOrderCount(food=food)
+            new_food_order_counter.count = new_food_order_counter.count+1
+            new_food_order_counter.save()
+
         if order_id:
             print("Order Exist")
             order = Order.objects.get(id=order_id)
@@ -654,6 +675,7 @@ class AddOrder(View):
                 order_food.save()
                 order.sub_total += food.price
                 order.save()
+            
         else:        
             print("Order Doesn't exist")          
             vat = Charges.objects.get(id=1).vat

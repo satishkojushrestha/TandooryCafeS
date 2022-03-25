@@ -152,3 +152,11 @@ class YearlyReport(models.Model):
     oct = models.PositiveIntegerField(default=0)
     nov = models.PositiveIntegerField(default=0)
     dec = models.PositiveIntegerField(default=0)
+
+
+class FoodOrderCount(models.Model):
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.food.name} -> {self.count}'
