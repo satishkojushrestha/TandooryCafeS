@@ -1,5 +1,6 @@
+from tkinter import Y
 from django.contrib import admin
-from .models import FoodIngBridge, FoodIngredient, User, Employee, Supplier, Ingredient, Food, Category, Order, OrderFood, Charges, QRHistory
+from .models import FoodIngBridge, FoodIngredient, User, Employee, Supplier, Ingredient, Food, Category, Order, OrderFood, Charges, QRHistory, YearlyReport
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -15,3 +16,4 @@ admin.site.register(Charges)
 admin.site.register(FoodIngBridge)
 admin.site.register(FoodIngredient)
 admin.site.register(QRHistory)
+admin.site.register(YearlyReport)

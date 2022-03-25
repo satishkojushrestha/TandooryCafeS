@@ -13,8 +13,60 @@ from datetime import datetime
 def yearly_report(year, month, total_earnings):
     try:
         report_obj = YearlyReport.objects.get(year=year)
+        if month == '1':
+            report_obj.jan = total_earnings
+        elif month == '2':
+            report_obj.feb = total_earnings
+        elif month == '3':
+            report_obj.mar = total_earnings
+        elif month == '4':
+            report_obj.apr = total_earnings
+        elif month == '5':
+            report_obj.may = total_earnings
+        elif month == '6':
+            report_obj.jun = total_earnings
+        elif month == '7':
+            report_obj.jul = total_earnings
+        elif month == '8':
+            report_obj.aug = total_earnings
+        elif month == '9':
+            report_obj.sep = total_earnings
+        elif month == '10':
+            report_obj.oct = total_earnings
+        elif month == '11':
+            report_obj.nov = total_earnings
+        elif month == '12':
+            report_obj.dec = total_earnings
+        else:
+            pass        
     except:
-        pass
+        report_obj = YearlyReport(year=year)
+        if month == '1':
+            report_obj.jan = total_earnings
+        elif month == '2':
+            report_obj.feb = total_earnings
+        elif month == '3':
+            report_obj.mar = total_earnings
+        elif month == '4':
+            report_obj.apr = total_earnings
+        elif month == '5':
+            report_obj.may = total_earnings
+        elif month == '6':
+            report_obj.jun = total_earnings
+        elif month == '7':
+            report_obj.jul = total_earnings
+        elif month == '8':
+            report_obj.aug = total_earnings
+        elif month == '9':
+            report_obj.sep = total_earnings
+        elif month == '10':
+            report_obj.oct = total_earnings
+        elif month == '11':
+            report_obj.nov = total_earnings
+        elif month == '12':
+            report_obj.dec = total_earnings
+
+    report_obj.save()
 
 #to get monthly stock, order, earning, and payment numbers on dashboard
 def monthly_report():
@@ -56,10 +108,9 @@ def monthly_report():
         if ingredient_year == current_year and ingredient_month == current_month:
             total_stock += 1
             price = ingredient.quantity * ingredient.price_per_unit
-            total_payments = price + total_payments
-
-    
-
+            total_payments = price + total_payments   
+            
+    yearly_report(current_year, str(current_month), total_earnings)
     return total_stock, total_order, total_payments, total_earnings
 
 
@@ -67,15 +118,31 @@ def monthly_report():
 def dashboard_view(request):
     # total_stock, expense = get_total_stock_and_price()
     # total_orders = Order.objects.filter(ordered=True).count()
+    current_date = str(datetime.now().date())
+    full_date = datetime.strptime(current_date, "%Y-%m-%d")
+    current_year = full_date.year #from here we gotcurrent year
+    try:
+        yearly_report_ = YearlyReport.objects.get(year=current_year)
+        total_stock, total_order, total_payments, total_earnings = monthly_report()
+        context = {
+            'total_stock': total_stock,
+            'total_order': total_order,
+            'total_payments': total_payments,
+            'total_earnings': total_earnings, 
+            'yearly_report': yearly_report_       
+        }
+        return render(request, "index.html", context)
+    except:
+        total_stock, total_order, total_payments, total_earnings = monthly_report()
+        context = {
+            'total_stock': total_stock,
+            'total_order': total_order,
+            'total_payments': total_payments,
+            'total_earnings': total_earnings,        
+        }
+        return render(request, "index.html", context)
 
-    total_stock, total_order, total_payments, total_earnings = monthly_report()
-    context = {
-        'total_stock': total_stock,
-        'total_order': total_order,
-        'total_payments': total_payments,
-        'total_earnings': total_earnings,
-    }
-    return render(request, "index.html", context)
+    
 
 def logoutView(request):
     logout(request)

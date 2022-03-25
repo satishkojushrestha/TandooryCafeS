@@ -65,6 +65,33 @@
         }
 
 
+        .row{ 
+            margin: 0;
+            padding: 0;
+            width: 100%;          
+        }
+
+        .wrapper-top-list{
+            width: 80%;
+            margin-left: 10%;
+        }
+
+        .card-cust{
+            box-shadow: 2px 3px 8px rgba(28 73 200 / 40%);
+            border: 1px #1c49c8 solid;
+            background-color: #1c49c8;
+            color: white;
+            padding: 5px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
+
+        .table .thead-dark th{
+            background-color: black !important;
+        }
+
+
+
     </style>
     {% block cssandscripts %} {% endblock %}
     
@@ -475,7 +502,7 @@
                     <div class="row">
 
                         <div class="col-xl-8 col-lg-7">
-
+                            <h5>Yearly Earning Chart</h5>
                             <!-- Area Chart -->
                             <div class="card shadow mb-6">
                                 <div class="card-header py-3">
@@ -486,12 +513,38 @@
                                         <canvas id="myAreaChart"></canvas>
                                     </div>
                                     <hr>
-                                    Yearly Earning Chart of the year 2022.
+                                    {% if yearly_report %}
+                                    Yearly Earning Chart of the year {{ yearly_report.year}}.
+                                    {% else %}
+                                    Yearly Earning Chart of the year.
+                                    {% endif %}
                                 </div>
                             </div>
 
                         </div>
 
+                        <div class="col-xl-4 col-lg-5">
+                            <h5>Top Selling Foods</h5>
+                            <div class="card" style="border-radius: 10px;">
+                                <table class="table" style="border-radius: 10px;">
+                                    <tr class="thead-dark">
+                                        <th>#</th>
+                                        <th>Name</th>                                     
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Coke</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Fanta</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                                            
+                        </div>
                         
 
                     </div>
@@ -611,7 +664,12 @@
             pointHoverBorderColor: "rgba(78, 115, 223, 1)",
             pointHitRadius: 10,
             pointBorderWidth: 2,
-            data: [0, 10000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+
+            {% if yearly_report %}
+            data: [{{yearly_report.jan}}, {{yearly_report.feb}}, {{yearly_report.mar}}, {{yearly_report.apr}}, {{yearly_report.may}}, {{yearly_report.jun}}, {{yearly_report.jul}}, {{yearly_report.aug}}, {{yearly_report.sep}}, {{yearly_report.oct}}, {{yearly_report.nov}}, {{yearly_report.dec}}],
+            {% else %}
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            {% endif %}
             }],
         },
         options: {
