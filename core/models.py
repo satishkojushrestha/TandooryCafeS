@@ -1,3 +1,4 @@
+from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 #for generating qr code
@@ -135,3 +136,19 @@ class QRHistory(models.Model):
     ing_name = models.CharField(max_length=50)
     quantity = models.IntegerField()
     scanned_date = models.DateTimeField(auto_now_add=True)
+
+
+class YearlyReport(models.Model):
+    year = models.CharField(max_length=20)
+    jan = models.PositiveIntegerField(default=0)
+    feb = models.PositiveIntegerField(default=0)
+    mar = models.PositiveIntegerField(default=0)
+    apr = models.PositiveIntegerField(default=0)
+    may = models.PositiveIntegerField(default=0)
+    jun = models.PositiveIntegerField(default=0)
+    jul = models.PositiveIntegerField(default=0)
+    aug = models.PositiveIntegerField(default=0)
+    sep = models.PositiveIntegerField(default=0)
+    oct = models.PositiveIntegerField(default=0)
+    nov = models.PositiveIntegerField(default=0)
+    dec = models.PositiveIntegerField(default=0)

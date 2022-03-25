@@ -3,12 +3,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from core.forms import ChargesForm, EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Charges, Food, FoodIngBridge, Ingredient, Order, OrderFood, Supplier, User, Employee, Category, QRHistory
+from core.models import Charges, Food, FoodIngBridge, Ingredient, Order, OrderFood, Supplier, User, Employee, Category, QRHistory, YearlyReport
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.generic import UpdateView
 from datetime import datetime
+
+def yearly_report(year, month, total_earnings):
+    try:
+        report_obj = YearlyReport.objects.get(year=year)
+    except:
+        pass
 
 #to get monthly stock, order, earning, and payment numbers on dashboard
 def monthly_report():
@@ -51,6 +57,8 @@ def monthly_report():
             total_stock += 1
             price = ingredient.quantity * ingredient.price_per_unit
             total_payments = price + total_payments
+
+    
 
     return total_stock, total_order, total_payments, total_earnings
 
