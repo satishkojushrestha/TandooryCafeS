@@ -8,20 +8,64 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.generic import UpdateView
+from datetime import datetime
 
-
+#to get monthly stock, order, earning, and payment numbers on dashboard
 def monthly_report():
-    pass
+    """
+        **Instrictions**
+        - first get the month using datetime library. 
+        - then compare it with the saved date and time.
+    """
+    total_stock = 0
+    total_order = 0
+    total_payments = 0
+    total_earnings = 0
+    current_date = str(datetime.now().date())
+    full_date = datetime.strptime(current_date, "%Y-%m-%d")
+    current_month = full_date.month #from here we got current month
+    current_year = full_date.year #from here we gotcurrent year
+
+    #we can get total earning and total orders form order
+    orders = Order.objects.all()
+    #we can get tota payments and total ingredients from ingredient
+    ingredients = Ingredient.objects.all()
+
+    for order in orders:
+        order_date = datetime.strptime(str(order.time_stamp.date()), "%Y-%m-%d")
+        order_year = order_date.year
+        order_month = order_date.month
+        #checking whether the order year and order month matches current year and month for monthly calculation
+        if order_year == current_year and order_month == current_month:
+            if order.ordered:
+                total_order+=1
+            if order.payment:
+                total_earnings+=int(order.grand_total)            
+
+    for ingredient in ingredients:
+        ingredient_date = datetime.strptime(str(ingredient.time_stamp), "%Y-%m-%d")
+        ingredient_year = ingredient_date.year
+        ingredient_month = ingredient_date.month
+
+        if ingredient_year == current_year and ingredient_month == current_month:
+            total_stock += 1
+            price = ingredient.quantity * ingredient.price_per_unit
+            total_payments = price + total_payments
+
+    return total_stock, total_order, total_payments, total_earnings
 
 
 @login_required(login_url="/")
 def dashboard_view(request):
-    total_stock, expense = get_total_stock_and_price()
-    total_orders = Order.objects.filter(ordered=True).count()
+    # total_stock, expense = get_total_stock_and_price()
+    # total_orders = Order.objects.filter(ordered=True).count()
+
+    total_stock, total_order, total_payments, total_earnings = monthly_report()
     context = {
         'total_stock': total_stock,
-        'expense': expense,
-        'total_orders': total_orders,
+        'total_order': total_order,
+        'total_payments': total_payments,
+        'total_earnings': total_earnings,
     }
     return render(request, "index.html", context)
 
@@ -194,6 +238,7 @@ def add_ingredient_view(request):
                     new_quantity = currquantity + int(quantity)
                     ing.quantity = new_quantity
                     ing.price_per_unit = price_per_unit
+                    ing.time_stamp = datetime.now().date()                    
                     ing_found = True
                     ing.save()
                     break
