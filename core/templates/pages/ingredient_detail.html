@@ -73,7 +73,7 @@
                                     <tbody>
                                         {% for ingredient in ingredients %}
                                             <tr id="ingredient-{{ ingredient.id }}">
-                                                <td class="text-center"><a href="{{ ingredient.qr.url }}" target="blank"><img src="{{ ingredient.qr.url }}" alt="{{ ingredient.name }}" style="height: 80px; width: 80px;"></a></td>
+                                                <td class="text-center"><a href="{{ ingredient.qr.url }}" target="blank" download><img src="{{ ingredient.qr.url }}" alt="{{ ingredient.name }}" style="height: 80px; width: 80px;"></a></td>
                                                 <td>{{ ingredient.name }}</td>
                                                 <td>{{ ingredient.unit }}</td>
                                                 <td>{{ ingredient.price_per_unit }}</td>
