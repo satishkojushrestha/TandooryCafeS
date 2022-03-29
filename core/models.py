@@ -1,3 +1,5 @@
+from email.policy import default
+from http.cookiejar import DefaultCookiePolicy
 from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -94,6 +96,7 @@ class Charges(models.Model):
 class Order(models.Model):
     order_description = models.CharField(max_length=150)
     time_stamp = models.DateTimeField(auto_created=True, auto_now_add=True)
+    order_date = models.DateField(auto_created=True, auto_now_add=True)
     sub_total = models.IntegerField(default=0)
     grand_total = models.IntegerField(default=0)
     ordered = models.BooleanField(default=False)
@@ -160,3 +163,9 @@ class FoodOrderCount(models.Model):
 
     def __str__(self):
         return f'{self.food.name} -> {self.count}'
+        
+
+class ReportType(models.Model):
+    yearly = models.BooleanField(default=False)
+    monthly = models.BooleanField(default=True)
+    weekly = models.BooleanField(default=False)

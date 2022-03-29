@@ -130,3 +130,12 @@ DATE_INPUT_FORMATS = ['%d/%m/%Y']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+#email verification
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'tandoorycafe@gmail.com'
+EMAIL_HOST_PASSWORD = "#tandoorycafemail"
+EMAIL_PORT = 465
