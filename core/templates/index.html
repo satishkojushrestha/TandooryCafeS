@@ -72,6 +72,15 @@
             margin-left: 2%;
         }
 
+        .custom-card-2{
+            padding: 15px;
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            margin-left: 12px;
+        }
+        
+
         .foods{
             margin-top: 4%;
             width: 85%;
@@ -104,6 +113,10 @@
 
         .border-right-warning{
             border-bottom: .25rem solid #f6c23e!important;
+        }
+
+        .border-right-danger{
+            border-bottom: .25rem solid #fb3838!important;
         }
 
         .foods{
@@ -423,7 +436,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total Orders (Monthly)</div>
+                                                Total Orders ({{report_type}})</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_order }}</div>
                                         </div>
                                         <div class="col-auto">
@@ -440,7 +453,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Payment (Monthly)</div>
+                                                Total Payment ({{report_type}})</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rs. {{ total_payments }}</div>
                                         </div>
                                         <div class="col-auto">
@@ -487,7 +500,7 @@
                                 <div class="card-body card-body-hover">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Stock (Monthly)
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Stock ({{report_type}})
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
@@ -510,7 +523,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Earning (Monthly)</div>
+                                                Total Earning ({{report_type}})</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_earnings }}</div>
                                         </div>
                                         <div class="col-auto">
@@ -566,10 +579,32 @@
                         </div>
 
                         <div class="col-xl-4 col-lg-5">
-                            <div class="card custom-card border-right-warning" style="border-radius: 10px;">                               
+                            <div class="card custom-card border-right-danger" style="border-radius: 10px;">                               
 
-                                <h4 class="top-list-title">Top Selling Food</h4>
-                                {% for foods in top_foods %}
+                                <h4 class="top-list-title text-danger">Low Ingredients</h4>
+
+                                {% for ingredients in low_ingredient %}
+                                    <div class="foods row">                                    
+                                        <div class="col-6">
+                                            <span>{{ingredients.name}}</span>
+                                        </div>                                   
+                                        <span class="col-6 text-right">Quantity: {{ingredients.quantity}}</span>
+                                    </div>  
+                                {% endfor %}    
+                                
+                                {% if low_ing_count == 0 %}
+
+                                {% else %}
+
+                                <div class="row">
+                                    <div class="col-12 text-right">
+                                        <a href="{% url 'low_ingredients' %}" style="margin-right: 35px;" class="btn btn-primary">See More..</a>
+                                    </div>
+                                </div>
+
+                                {% endif %}
+                                
+                                <!-- {% for foods in top_foods %}
                                 <div class="foods row">                                    
                                     <div class="col-4">
                                         <img src="{{ foods.food.image.url }}" alt="{{ foods.food.name }}" class="food-img">
@@ -580,7 +615,7 @@
                                     </div>                                    
                                     <span class="price col-4 text-right">{{ foods.food.price }}</span>
                                 </div>
-                                {% endfor %}
+                                {% endfor %} -->
 
                                 <!-- <div class="foods row">
                                     <div class="col-4">
@@ -623,6 +658,27 @@
                                             
                         </div>                        
 
+                    </div>
+
+                    <div class="row">
+                        <div class="card custom-card-2 border-right-warning" style="border-radius: 10px;">                               
+
+                            <h4 class="top-list-title">Top Selling Food</h4>
+                            {% for foods in top_foods %}
+                            <div class="foods row">                                    
+                                <div class="col-4">
+                                    <img src="{{ foods.food.image.url }}" alt="{{ foods.food.name }}" class="food-img">
+                                </div>  
+                                <div class="discription col-4 text-center">
+                                    <li class="food-name">{{ foods.food.name }}</li>
+                                    <li class="food-cat">{{ foods.food.category }}</li> 
+                                </div>                                    
+                                <span class="price col-4 text-right">Rs. {{ foods.food.price }}</span>
+                            </div>
+                            {% endfor %}
+                            
+
+                        </div> 
                     </div>
                 
                 </div>

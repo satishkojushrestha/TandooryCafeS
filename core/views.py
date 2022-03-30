@@ -192,7 +192,32 @@ def yearly_():
     current_ingredient = Ingredient.objects.filter(time_stamp__gte=startyear).filter(time_stamp__lte=endyear)
     total_stock, total_order, total_earnings, total_payments = calculations_report(current_orders, current_ingredient)
     return total_stock, total_order, total_earnings, total_payments
-    
+
+
+def get_low_ingredients():
+    ingredients = Ingredient.objects.filter(quantity__lte=5).order_by('quantity')
+    low_ing_count = ingredients.count()
+    ingredient_list = []
+    count = 0
+    for ingredient in ingredients:
+        ingredient_list.append(ingredient)
+        count+=1
+
+        if count == 5:
+            break
+    return ingredient_list, low_ing_count
+
+@login_required(login_url="/")
+def low_ingredients(request):
+    ingredients = Ingredient.objects.filter(quantity__lte=5).order_by('quantity')
+    ingredient_list, low_ing_count = get_low_ingredients()
+
+    if low_ing_count > 5:
+        return render(request,"pages/low_ingredient.html",{
+            'ingredients': ingredients
+        })
+    else:
+        return redirect('dashboard')
     
 
 @login_required(login_url="/")
@@ -211,7 +236,14 @@ def dashboard_view(request):
         counter+=1
         if counter == 4:
             break
-    print(new_list)
+    # print(new_list)
+
+    ingredient_list, low_ing_count = get_low_ingredients()
+
+    if low_ing_count > 5:
+        low_ing_count = low_ing_count
+    else:
+        low_ing_count = 0
 
     try:
         selected_report = ReportType.objects.get(id=1)
@@ -221,18 +253,18 @@ def dashboard_view(request):
             monthly=True,
             weekly=False
         )
+        selected_report = ReportType.objects.get(id=1)
 
-    selected_report = ReportType.objects.get(id=1)
     try:
         yearly_report_ = YearlyReport.objects.get(year=current_year)
         if selected_report.yearly:
-            total_stock, total_order, total_payments, total_earnings = yearly_()
+            total_stock, total_order, total_earnings, total_payments = yearly_()
             report_type = 'Yearly'
         elif selected_report.monthly:
-            total_stock, total_order, total_payments, total_earnings = monthly_report_second()
+            total_stock, total_order, total_earnings, total_payments = monthly_report_second()
             report_type = 'Monthly'
         elif selected_report.weekly:
-            total_stock, total_order, total_payments, total_earnings = weekly_report() 
+            total_stock, total_order, total_earnings, total_payments = weekly_report() 
             report_type = 'Weekly'
 
         context = {
@@ -242,18 +274,20 @@ def dashboard_view(request):
             'total_earnings': total_earnings, 
             'yearly_report': yearly_report_,
             'top_foods': new_list,   
-            'report_type': report_type    
+            'report_type': report_type,
+            'low_ingredient': ingredient_list,
+            'low_ing_count': low_ing_count    
         }
         return render(request, "index.html", context)
     except:
         if selected_report.yearly:
-            total_stock, total_order, total_payments, total_earnings = yearly_()
+            total_stock, total_order, total_earnings, total_payments = yearly_()
             report_type = 'Yearly'
         elif selected_report.monthly:
-            total_stock, total_order, total_payments, total_earnings = monthly_report_second()
+            total_stock, total_order, total_earnings, total_payments = monthly_report_second()
             report_type = 'Monthly'
         elif selected_report.weekly:
-            total_stock, total_order, total_payments, total_earnings = weekly_report()   
+            total_stock, total_order, total_earnings, total_payments = weekly_report()   
             report_type = 'Weekly'
         context = {
             'total_stock': total_stock,
@@ -261,7 +295,9 @@ def dashboard_view(request):
             'total_payments': total_payments,
             'total_earnings': total_earnings,  
             'top_foods': new_list, 
-            'report_type': report_type     
+            'report_type': report_type,
+            'low_ingredient': ingredient_list,
+            'low_ing_count': low_ing_count     
         }
         return render(request, "index.html", context)
 
