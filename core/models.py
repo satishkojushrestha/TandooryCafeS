@@ -167,5 +167,6 @@ class FoodOrderCount(models.Model):
 
 class ReportType(models.Model):
     yearly = models.BooleanField(default=False)
-    monthly = models.BooleanField(default=True)
+    monthly = models.BooleanField(default=False)
+    daily = models.BooleanField(default=True)
     weekly = models.BooleanField(default=False)

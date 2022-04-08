@@ -165,17 +165,26 @@ def monthly_report_second():
 
     # print(f"Monthly report: total order:{total_order}, total stock:{total_stock}, total earning:{total_earnings}, total payments:{total_payments}")
     
-    
-
+from datetime import date    
+import calendar
 def weekly_report():
+    monthly_report_second()
     day = str(datetime.now().date())
     dt = datetime.strptime(day, '%Y-%m-%d')
-    start = dt - timedelta(days=dt.weekday()) - timedelta(days=1)
+    
+    curr_date = date.today()
+    today = calendar.day_name[curr_date.weekday()]
+
+    if today == "Sunday" or today == "Sun":
+        start = dt
+    else:
+        start = dt - timedelta(days=dt.weekday()) - timedelta(days=1)
+
     end = start + timedelta(days=6)
     startday = start.strftime('%Y-%m-%d')
     endday = end.strftime('%Y-%m-%d')
-    # print(start.strftime('%Y-%m-%d'))
-    # print(end.strftime('%Y-%m-%d'))
+    print(start.strftime('%Y-%m-%d'))
+    print(end.strftime('%Y-%m-%d'))
     current_orders = Order.objects.filter(order_date__gte=startday).filter(order_date__lte=endday).filter(ordered=True)
     current_ingredient = Ingredient.objects.filter(time_stamp__gte=startday).filter(time_stamp__lte=endday)
     total_stock, total_order, total_earnings, total_payments = calculations_report(current_orders, current_ingredient)
@@ -183,6 +192,7 @@ def weekly_report():
     
 
 def yearly_():
+    monthly_report_second()
     current_date = str(datetime.now().date())
     full_date = datetime.strptime(current_date, "%Y-%m-%d")
     year = full_date.year
@@ -192,6 +202,15 @@ def yearly_():
     current_ingredient = Ingredient.objects.filter(time_stamp__gte=startyear).filter(time_stamp__lte=endyear)
     total_stock, total_order, total_earnings, total_payments = calculations_report(current_orders, current_ingredient)
     return total_stock, total_order, total_earnings, total_payments
+
+def daily_():
+    monthly_report_second()
+    current_date = str(datetime.now().date())
+    full_date = datetime.strptime(current_date, "%Y-%m-%d")
+    current_orders = Order.objects.filter(order_date=full_date).filter(ordered=True)
+    current_ingredient = Ingredient.objects.filter(time_stamp__gte=full_date)
+    total_stock, total_order, total_earnings, total_payments = calculations_report(current_orders, current_ingredient)
+    return total_stock, total_order, total_earnings, total_payments    
 
 
 def get_low_ingredients():
@@ -266,6 +285,9 @@ def dashboard_view(request):
         elif selected_report.weekly:
             total_stock, total_order, total_earnings, total_payments = weekly_report() 
             report_type = 'Weekly'
+        elif selected_report.daily:
+            total_stock, total_order, total_earnings, total_payments = daily_()   
+            report_type = 'Daily' 
 
         context = {
             'total_stock': total_stock,
@@ -289,6 +311,9 @@ def dashboard_view(request):
         elif selected_report.weekly:
             total_stock, total_order, total_earnings, total_payments = weekly_report()   
             report_type = 'Weekly'
+        elif selected_report.daily:
+            total_stock, total_order, total_earnings, total_payments = daily_()   
+            report_type = 'Daily'            
         context = {
             'total_stock': total_stock,
             'total_order': total_order,
@@ -312,14 +337,22 @@ def report_type(request, selected):
         selected_report.yearly=True
         selected_report.monthly=False
         selected_report.weekly=False
+        selected_report.daily=False
     elif selected == "monthly":
         selected_report.yearly=False
         selected_report.monthly=True
         selected_report.weekly=False
+        selected_report.daily=False
     elif selected == "weekly":
         selected_report.yearly=False
         selected_report.monthly=False
         selected_report.weekly=True
+        selected_report.daily=False
+    elif selected == "daily":
+        selected_report.yearly=False
+        selected_report.monthly=False
+        selected_report.weekly=False
+        selected_report.daily=True
     else:
         return HttpResponse(status=404)
     selected_report.save()
