@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.urls import path
 from .views import *
 
@@ -40,4 +41,7 @@ urlpatterns = [
     path('qr/scan/', scanner_view, name='qr_scan'),
     path('stock/decrease/<int:id>/', decrease_stock, name='decrease_stock'),
     path('qrhistory/', qr_history_view, name="qr_history_view"),
+    path('food/ingredient/add/', food_ing_view, name="food_ing_view"),
+    path('food/ingredient/detail/', food_ing_detail_view, name="food_ing_detail_view"),
+    path('food/ingredient/delete/<int:id>/',delete_food_ing, name="delete_food_ing"),
 ]

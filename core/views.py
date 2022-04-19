@@ -1,9 +1,8 @@
-from telnetlib import STATUS
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from core.forms import ChargesForm, EmployeeForm, IngredientForm, LoginForm, SupplierForm, FoodForm, CategoryForm
 from django.contrib.auth import login, logout, authenticate
-from core.models import Charges, Food, FoodIngBridge, FoodOrderCount, Ingredient, Order, OrderFood, Supplier, User, Employee, Category, QRHistory, YearlyReport, ReportType
+from core.models import Charges, Food, FoodIngBridge, FoodIngredient, FoodOrderCount, Ingredient, Order, OrderFood, Supplier, User, Employee, Category, QRHistory, YearlyReport, ReportType
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
@@ -69,52 +68,6 @@ def yearly_report(year, month, total_earnings):
 
     report_obj.save()
 
-#to get monthly stock, order, earning, and payment numbers on dashboard
-def monthly_report():
-    """
-        **Instrictions**
-        - first get the month using datetime library. 
-        - then compare it with the saved date and time.
-    """
-    total_stock = 0
-    total_order = 0
-    total_payments = 0
-    total_earnings = 0
-    current_date = str(datetime.now().date())
-    full_date = datetime.strptime(current_date, "%Y-%m-%d")
-    current_month = full_date.month #from here we got current month
-    current_year = full_date.year #from here we gotcurrent year
-
-    #we can get total earning and total orders form order
-    # orders = Order.objects.filter(time_stamp__lte=current_date).filter(time_stamp__gte=)
-    orders = Order.objects.all()
-    #we can get tota payments and total ingredients from ingredient
-    ingredients = Ingredient.objects.all()
-
-    for order in orders:
-        order_date = datetime.strptime(str(order.time_stamp.date()), "%Y-%m-%d")
-        order_year = order_date.year
-        order_month = order_date.month
-        #checking whether the order year and order month matches current year and month for monthly calculation
-        if order_year == current_year and order_month == current_month:
-            if order.ordered:
-                total_order+=1
-            if order.payment:
-                total_earnings+=int(order.grand_total)            
-
-    for ingredient in ingredients:
-        ingredient_date = datetime.strptime(str(ingredient.time_stamp), "%Y-%m-%d")
-        ingredient_year = ingredient_date.year
-        ingredient_month = ingredient_date.month
-
-        if ingredient_year == current_year and ingredient_month == current_month:
-            total_stock += 1
-            price = ingredient.quantity * ingredient.price_per_unit
-            total_payments = price + total_payments   
-            
-    yearly_report(current_year, str(current_month), total_earnings)
-    return total_stock, total_order, total_payments, total_earnings
-
 
 def calculations_report(current_orders, current_ingredient):
     total_earnings = 0
@@ -149,21 +102,7 @@ def monthly_report_second():
 
     yearly_report(year, str(month), total_earnings)
 
-    return total_stock, total_order, total_earnings, total_payments
-    
-    # total_order = current_orders.count()
-    # total_stock = current_ingredient.count()
-    # total_earnings = 0
-    # current_order_with_payment = current_orders.filter(payment=True)
-    # for payed_order in current_order_with_payment:
-    #     total_earnings+=int(payed_order.grand_total)
-    
-    # total_payments = 0
-    # for ingredient in current_ingredient:
-    #     price = ingredient.quantity * ingredient.price_per_unit
-    #     total_payments = price + total_payments 
-
-    # print(f"Monthly report: total order:{total_order}, total stock:{total_stock}, total earning:{total_earnings}, total payments:{total_payments}")
+    return total_stock, total_order, total_earnings, total_payments    
     
 from datetime import date    
 import calendar
@@ -183,8 +122,8 @@ def weekly_report():
     end = start + timedelta(days=6)
     startday = start.strftime('%Y-%m-%d')
     endday = end.strftime('%Y-%m-%d')
-    print(start.strftime('%Y-%m-%d'))
-    print(end.strftime('%Y-%m-%d'))
+    # print(start.strftime('%Y-%m-%d'))
+    # print(end.strftime('%Y-%m-%d'))
     current_orders = Order.objects.filter(order_date__gte=startday).filter(order_date__lte=endday).filter(ordered=True)
     current_ingredient = Ingredient.objects.filter(time_stamp__gte=startday).filter(time_stamp__lte=endday)
     total_stock, total_order, total_earnings, total_payments = calculations_report(current_orders, current_ingredient)
@@ -274,21 +213,21 @@ def dashboard_view(request):
         )
         selected_report = ReportType.objects.get(id=1)
 
-    try:
-        yearly_report_ = YearlyReport.objects.get(year=current_year)
-        if selected_report.yearly:
-            total_stock, total_order, total_earnings, total_payments = yearly_()
-            report_type = 'Yearly'
-        elif selected_report.monthly:
-            total_stock, total_order, total_earnings, total_payments = monthly_report_second()
-            report_type = 'Monthly'
-        elif selected_report.weekly:
-            total_stock, total_order, total_earnings, total_payments = weekly_report() 
-            report_type = 'Weekly'
-        elif selected_report.daily:
-            total_stock, total_order, total_earnings, total_payments = daily_()   
-            report_type = 'Daily' 
+    if selected_report.yearly:
+        total_stock, total_order, total_earnings, total_payments = yearly_()
+        report_type = 'Yearly'
+    elif selected_report.monthly:
+        total_stock, total_order, total_earnings, total_payments = monthly_report_second()
+        report_type = 'Monthly'
+    elif selected_report.weekly:
+        total_stock, total_order, total_earnings, total_payments = weekly_report() 
+        report_type = 'Weekly'
+    elif selected_report.daily:
+        total_stock, total_order, total_earnings, total_payments = daily_()   
+        report_type = 'Daily' 
 
+    try:
+        yearly_report_ = YearlyReport.objects.get(year=current_year)        
         context = {
             'total_stock': total_stock,
             'total_order': total_order,
@@ -301,19 +240,7 @@ def dashboard_view(request):
             'low_ing_count': low_ing_count    
         }
         return render(request, "index.html", context)
-    except:
-        if selected_report.yearly:
-            total_stock, total_order, total_earnings, total_payments = yearly_()
-            report_type = 'Yearly'
-        elif selected_report.monthly:
-            total_stock, total_order, total_earnings, total_payments = monthly_report_second()
-            report_type = 'Monthly'
-        elif selected_report.weekly:
-            total_stock, total_order, total_earnings, total_payments = weekly_report()   
-            report_type = 'Weekly'
-        elif selected_report.daily:
-            total_stock, total_order, total_earnings, total_payments = daily_()   
-            report_type = 'Daily'            
+    except:          
         context = {
             'total_stock': total_stock,
             'total_order': total_order,
@@ -377,15 +304,14 @@ def loginView(request):
                 if auth_user is not None:
                     login(request, auth_user)
                     return redirect("dashboard")
-
                 else:
                     return render(request, "authentication/login.html", {
                         'message': 'Invalid Credential',
-                        'froms': LoginForm(request.POST),
+                        'forms': LoginForm(request.POST),
                     })
             except:
                 return render(request, "authentication/login.html", {
-                        'message': 'Invalid Username and Password',
+                        'message': 'Invalid Credential',
                         'forms': LoginForm(request.POST),
                     })
 
@@ -519,6 +445,13 @@ def add_ingredient_view(request):
                     
         if form.is_valid():
             quantity = form.cleaned_data.get('quantity')
+            if quantity <= 0:
+                return render(request, "pages/add_ingredient.html", {
+                    "form":form,
+                    "total_stock":total_stock,
+                    "total_price":total_price,
+                    "message": 'Quantity Should be greater than 1',
+                })                
             ingredient_name = request.POST.get('name')
             price_per_unit = form.cleaned_data.get('price_per_unit')
             for ing in ing_obj:
@@ -556,12 +489,19 @@ def add_supplier_view(request):
             last_name = form.cleaned_data.get("last_name")
             address = form.cleaned_data.get("address")
             contact = form.cleaned_data.get("contact")
-            new_supplier = Supplier(
-                first_name = first_name,
-                last_name = last_name,
-                address = address,
-                contact_number = contact,
-            )     
+            try:    
+                get_contact = Supplier.objects.get(contact_number=contact) 
+                return render(request,"pages/add_supplier.html",{
+                    "form":form,
+                    "message": "Supplier with that contact number already exist."
+                })      
+            except:                
+                new_supplier = Supplier(
+                    first_name = first_name,
+                    last_name = last_name,
+                    address = address,
+                    contact_number = contact,
+                )     
             new_supplier.save()
             return redirect("add_supplier")
         else:
@@ -1000,6 +940,7 @@ class UpdatePrice(View):
         }
         return JsonResponse(price_data)
 
+@login_required(login_url="/")
 def update_order(request,id):
     if request.method == "POST":
         order_id = request.POST.get('order_id')
@@ -1028,7 +969,7 @@ def update_order(request,id):
                     food_ing_quantity = ingredients.quantity
                     ing = Ingredient.objects.get(id=ingredients.ingredient.id)
                     used_quantity = order_food_quantity * food_ing_quantity
-                    remaining_quantity = int(ing.quantity)
+                    remaining_quantity = ing.quantity
                     super_user = User.objects.filter(is_superuser=True)[0]                                        
                     email = super_user.email                    
 
@@ -1060,11 +1001,12 @@ def update_order(request,id):
     }
     return render(request, 'pages/edit_order.html', context)
 
-
+@login_required(login_url="/")
 #qr scanner
 def scanner_view(request):
     return render(request, 'pages/qr_scan.html')
 
+@login_required(login_url="/")
 def decrease_stock(request, id):
     ing = Ingredient.objects.get(id=id)
     super_user = User.objects.filter(is_superuser=True)[0]                                        
@@ -1072,8 +1014,8 @@ def decrease_stock(request, id):
     if request.method == "POST":
         quantity = request.POST.get('quantity')
         try:
-            quantity = int(quantity)
-            curr_quantity = int(ing.quantity)
+            quantity = float(quantity)
+            curr_quantity = ing.quantity
             if curr_quantity < quantity:
                 return render(request, 'pages/decrease_stock.html',{
                     'ingredient': ing,
@@ -1108,7 +1050,60 @@ def decrease_stock(request, id):
         'ingredient': ing 
     })
 
+@login_required(login_url="/")
 def qr_history_view(request):
     return render(request,"pages/qr_history_detail.html",{
         'qrhistories': QRHistory.objects.all(),
     })
+
+@login_required(login_url="/")
+def food_ing_view(request):
+    foods = Food.objects.all()
+    ingredients = Ingredient.objects.all()
+
+    context = {
+        'foods': foods,
+        'ingredients': ingredients
+    }
+    if request.method == "POST":
+        food = foods.get(id=request.POST.get("foods"))
+        ingredient = ingredients.get(id=request.POST.get("ing"))
+        quantity = request.POST.get("quantity")
+        try:
+            quantity = float(quantity)
+            if quantity <= 0:
+                context['message'] = "The quantity should be greater than 0."
+                return render(request, "pages/fooding.html",context)
+        except:
+            context['message'] = "Quantity should be in number."
+            return render(request, "pages/fooding.html",context)
+
+        try:
+            food_ing = FoodIngredient.objects.get(food=food)
+            FoodIngBridge.objects.create(
+                food_ing=food_ing,
+                ingredient=ingredient,
+                quantity=quantity,
+            ) 
+        except:
+            new_fooding_obj = FoodIngredient(food=food)
+            new_fooding_obj.save()
+            FoodIngBridge.objects.create(
+                food_ing=new_fooding_obj,
+                ingredient=ingredient,
+                quantity=quantity,
+            ) 
+
+    return render(request,"pages/fooding.html", context)
+
+@login_required(login_url="/")
+def food_ing_detail_view(request):
+    return render(request,"pages/food_ing_detail.html",{
+        'food_ings': FoodIngBridge.objects.all(),
+    })
+
+@login_required(login_url="/")
+def delete_food_ing(request,id):
+    food_ing = FoodIngBridge.objects.get(id=id)
+    food_ing.delete()
+    return redirect('food_ing_detail_view')

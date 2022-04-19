@@ -159,6 +159,22 @@
                 </div> -->
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSix"
+                    aria-expanded="true" aria-controls="collapseSix">
+                    <i class="material-icons">inventory_2</i>
+                    <span>Food Ingredient</span>
+                </a>
+
+                <div id="collapseSix" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">                    
+                        <a class="collapse-item" href="{% url 'food_ing_view' %}">Add Food Ingredient</a>
+                        <a class="collapse-item" href="{% url 'food_ing_detail_view' %}">Food Ingredients</a>
+                    </div>
+                </div>
+
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">

@@ -233,6 +233,22 @@
                 </div> -->
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSix"
+                    aria-expanded="true" aria-controls="collapseSix">
+                    <i class="material-icons">inventory_2</i>
+                    <span>Food Ingredient</span>
+                </a>
+
+                <div id="collapseSix" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">                    
+                        <a class="collapse-item" href="{% url 'food_ing_view' %}">Add Food Ingredient</a>
+                        <a class="collapse-item" href="{% url 'food_ing_detail_view' %}">Food Ingredients</a>
+                    </div>
+                </div>
+
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -783,7 +799,7 @@
         data: {
             labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             datasets: [{
-            label: "Earnings",
+            label: "Total Earning",
             lineTension: 0.3,
             backgroundColor: "rgba(78, 115, 223, 0.05)",
             borderColor: "rgba(78, 115, 223, 1)",
@@ -833,7 +849,7 @@
                 padding: 10,
                 // Include a dollar sign in the ticks
                 callback: function(value, index, values) {
-                    return '$' + number_format(value);
+                    return 'Rs.' + number_format(value);
                 }
                 },
                 gridLines: {

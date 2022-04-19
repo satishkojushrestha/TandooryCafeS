@@ -67,8 +67,12 @@
                                             {% render_field forms.email class="form-control form-control-user" placeholder="Email..." %}
                                         </div>
                                         <div class="form-group" style="margin-top: 2%;">
-                                            {% render_field forms.password class="form-control form-control-user" id="exampleInputPassword" placeholder="Password..." %}                                           
+                                            {% render_field forms.password class="form-control form-control-user" id="exampleInputPassword" placeholder="Password..." %}  
                                         </div>
+                                        {% if message %}
+                                        <span class="text-danger">* {{message}}</span>
+                                        {% endif %}
+                                        
                                         
                                         <input type="submit" name="Submit" value="Login" class="btn btn-primary btn-user btn-block" style="margin-top: 5%;">                                     
                                     </form>

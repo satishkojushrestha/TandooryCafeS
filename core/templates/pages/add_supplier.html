@@ -41,11 +41,14 @@
         <!-- Basic Card Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0">Add Supplier</h6>
+                <h6 class="m-0">Add Supplier</h6>                
             </div>
             <div class="card-body">
                 <form method="POST">
                     {% csrf_token %}
+                    {% if message %}
+                        <h6 class="text-danger" style="font-weight: 400;">* {{ message }}</h6>
+                    {% endif %}
                     <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="firstname">First Name</label>

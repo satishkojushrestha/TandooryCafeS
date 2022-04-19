@@ -42,7 +42,7 @@ class Ingredient(models.Model):
     price_per_unit = models.PositiveIntegerField()
     supplier = models.ForeignKey(Supplier, on_delete=models.RESTRICT)    
     time_stamp = models.DateField(auto_now_add=True)
-    quantity = models.PositiveIntegerField()
+    quantity = models.FloatField()
     qr = models.ImageField(upload_to='qr_codes', blank=True)
 
     def __str__(self):
@@ -58,6 +58,7 @@ class Ingredient(models.Model):
             get_pk = str(last_pk.pk+1)
             # print(get_pk)
                       
+        # qr_url = f'http://192.168.1.130:8000/stock/decrease/{get_pk}'
         qr_url = f'http://127.0.0.1:8000/stock/decrease/{get_pk}'
         qrcode_img = qrcode.make(qr_url)
         qr_size = qrcode_img.pixel_size
@@ -129,7 +130,7 @@ class FoodIngredient(models.Model):
 class FoodIngBridge(models.Model):
     food_ing = models.ForeignKey(FoodIngredient, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()   
+    quantity = models.FloatField()   
 
     def __str__(self):
         return f"{self.food_ing} - {self.ingredient}" 
