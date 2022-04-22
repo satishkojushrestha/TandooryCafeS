@@ -165,7 +165,7 @@ def get_low_ingredients():
             break
     return ingredient_list, low_ing_count
 
-@login_required(login_url="/")
+#loginrequired
 def low_ingredients(request):
     ingredients = Ingredient.objects.filter(quantity__lte=5).order_by('quantity')
     ingredient_list, low_ing_count = get_low_ingredients()
@@ -178,7 +178,7 @@ def low_ingredients(request):
         return redirect('dashboard')
     
 
-@login_required(login_url="/")
+# #loginrequired
 def dashboard_view(request):    
     # total_stock, expense = get_total_stock_and_price()
     # total_orders = Order.objects.filter(ordered=True).count()
@@ -254,7 +254,7 @@ def dashboard_view(request):
         return render(request, "index.html", context)
 
 
-@login_required(login_url="/")
+#loginrequired
 def report_type(request, selected):
     selected_report = ReportType.objects.get(id=1)  
     # print("URL hit")
@@ -317,12 +317,12 @@ def loginView(request):
 
     return render(request, "authentication/login.html", {"forms":LoginForm})
 
-@login_required(login_url="/")
+#loginrequired
 def profile_view(request):
     return render(request,"profile.html")
 
 # @permission_required('can_add_user', login_url="/")
-@login_required(login_url="/")
+#loginrequired
 def update_profile(request):
     if request.method == "POST":
         print(request.POST)
@@ -355,16 +355,17 @@ def update_profile(request):
 
     return render(request, "update_profile.html")
 
-@login_required(login_url="/")
+#loginrequired
 def employee_view(request):    
     return render(request, "pages/employee_detail.html", {
         'employees': Employee.objects.all(),
     })
 
-@login_required(login_url="/")
+#loginrequired
 def add_employee_view(request):
-    if request.method == "POST":
+    if request.method == "POST":        
         employeeForm = EmployeeForm(request.POST)
+        print(request.POST)
         if employeeForm.is_valid():
             first_name = employeeForm.cleaned_data.get("first_name")
             last_name = employeeForm.cleaned_data.get("last_name")
@@ -385,7 +386,7 @@ def add_employee_view(request):
         'form': EmployeeForm(),
     })
 
-@login_required(login_url="/")
+#loginrequired
 def edit_employee_view(request, id):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -418,7 +419,7 @@ def edit_employee_view(request, id):
     except:
         return HttpResponse(status=404)
    
-@login_required(login_url="/")
+#loginrequired
 def supplier_view(request):  
     return render(request, "pages/supplier_detail.html", {
         'suppliers': Supplier.objects.all(),
@@ -435,7 +436,7 @@ def get_total_stock_and_price():
     return total_stock, total_price    
        
 
-@login_required(login_url="/")
+#loginrequired
 def add_ingredient_view(request):
     ing_found = False
     total_stock, total_price = get_total_stock_and_price() 
@@ -480,7 +481,7 @@ def add_ingredient_view(request):
         "total_price":total_price
     })
 
-@login_required(login_url="/")
+#loginrequired
 def add_supplier_view(request):
     if request.method == "POST":
         form = SupplierForm(request.POST)
@@ -512,7 +513,7 @@ def add_supplier_view(request):
         "form":SupplierForm()
     })
 
-@login_required(login_url="/")
+#loginrequired
 def edit_supplier_view(request, id):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -563,7 +564,7 @@ class DeleteCrudUserSupplier(View):
         }
         return JsonResponse(data)
 
-@login_required(login_url="/")
+#loginrequired
 def ingredient_view(request):
     return render(request, "pages/ingredient_detail.html",{
         'ingredients':Ingredient.objects.all(),
@@ -578,7 +579,7 @@ class DeleteCrudIngredient(View):
         }
         return JsonResponse(data)
 
-@login_required(login_url="/")
+#loginrequired
 def edit_ingredient_view(request, id):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -613,7 +614,7 @@ def edit_ingredient_view(request, id):
     except:
         return HttpResponse(status=404)
 
-@login_required(login_url="/")
+#loginrequired
 def add_food_view(request):
     foods = Food.objects.all()
     if request.method == 'POST':
@@ -649,7 +650,7 @@ def add_food_view(request):
 
     return render(request, 'pages/add_food.html', {'form':FoodForm})
 
-@login_required(login_url="/")
+#loginrequired
 def add_category_view(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -660,7 +661,7 @@ def add_category_view(request):
             return render(request, 'pages/add_category.html', {'form':form, 'categories': Category.objects.all()})
     return render(request, 'pages/add_category.html', {'form':CategoryForm, 'categories': Category.objects.all()})
 
-@login_required(login_url="/")
+#loginrequired
 def category_view(request):
     return render(request, 'pages/category_detail.html',{
         'categorys': Category.objects.all(),
@@ -675,7 +676,7 @@ class DeleteCrudUserCategory(View):
         }
         return JsonResponse(data)
 
-@login_required(login_url="/")
+#loginrequired
 def food_view(request):
     return render(request, "pages/food_detail.html",{
         'foods':Food.objects.all(),
@@ -692,7 +693,7 @@ class DeleteCrudFood(View):
         return JsonResponse(data)
 
 
-@login_required(login_url="/")
+#loginrequired
 def edit_food_view(request, id):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -764,7 +765,7 @@ def charges_view(request):
     })
 
 #orders
-@login_required(login_url="/")
+#loginrequired
 def order_view(request):
     return render(request,'pages/order.html', {
         'foods':Food.objects.all(),
@@ -824,7 +825,7 @@ class AddOrder(View):
                 order.save()
             
         else:        
-            print("Order Doesn't exist")          
+            # print("Order Doesn't exist")          
             vat = Charges.objects.get(id=1).vat
             order = Order(order_description="Order in process.", sub_total=0, ordered=False, status=False, vat=vat)
             order.sub_total += food.price        
@@ -853,7 +854,7 @@ class AddOrder(View):
         }
         return JsonResponse(order_data)
 
-@login_required(login_url="/")
+#loginrequired
 def order_detail_view(request, id):
     order_obj = get_object_or_404(Order, id=id)
     if order_obj.ordered:
@@ -884,7 +885,7 @@ def calculate_grand_total(id):
     order_obj.grand_total=net_price
     order_obj.save()
 
-@login_required(login_url="/")
+#loginrequired
 def save_order_detail(request):
     if request.method == "POST":    
         order = request.POST.get("order")
@@ -900,7 +901,7 @@ def save_order_detail(request):
     else:
         return HttpResponse(status=404)
 
-@login_required(login_url="/")
+#loginrequired
 def order_table_view(request):
     return render(request, "pages/order_table.html",{
         'order_obj': Order.objects.filter(ordered=True),
@@ -940,7 +941,7 @@ class UpdatePrice(View):
         }
         return JsonResponse(price_data)
 
-@login_required(login_url="/")
+#loginrequired
 def update_order(request,id):
     if request.method == "POST":
         order_id = request.POST.get('order_id')
@@ -1001,12 +1002,12 @@ def update_order(request,id):
     }
     return render(request, 'pages/edit_order.html', context)
 
-@login_required(login_url="/")
+#loginrequired
 #qr scanner
 def scanner_view(request):
     return render(request, 'pages/qr_scan.html')
 
-@login_required(login_url="/")
+#loginrequired
 def decrease_stock(request, id):
     ing = Ingredient.objects.get(id=id)
     super_user = User.objects.filter(is_superuser=True)[0]                                        
@@ -1050,13 +1051,13 @@ def decrease_stock(request, id):
         'ingredient': ing 
     })
 
-@login_required(login_url="/")
+#loginrequired
 def qr_history_view(request):
     return render(request,"pages/qr_history_detail.html",{
         'qrhistories': QRHistory.objects.all(),
     })
 
-@login_required(login_url="/")
+#loginrequired
 def food_ing_view(request):
     foods = Food.objects.all()
     ingredients = Ingredient.objects.all()
@@ -1096,13 +1097,13 @@ def food_ing_view(request):
 
     return render(request,"pages/fooding.html", context)
 
-@login_required(login_url="/")
+#loginrequired
 def food_ing_detail_view(request):
     return render(request,"pages/food_ing_detail.html",{
         'food_ings': FoodIngBridge.objects.all(),
     })
 
-@login_required(login_url="/")
+#loginrequired
 def delete_food_ing(request,id):
     food_ing = FoodIngBridge.objects.get(id=id)
     food_ing.delete()
